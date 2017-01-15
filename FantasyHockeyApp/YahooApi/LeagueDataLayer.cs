@@ -13,6 +13,7 @@ namespace YahooApi
         {
             _leagueId = leagueId;
 
+            RefreshData();
             // from http://stackoverflow.com/questions/13019433/calling-method-on-every-x-minutes
             var timer = new System.Threading.Timer((e) =>
             {
