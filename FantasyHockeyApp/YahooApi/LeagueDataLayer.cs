@@ -24,5 +24,15 @@ namespace YahooApi
         {
             _league = _yahooApiClient.GetLeague(_leagueId);
         }
+
+        public LeagueInfo GetLeagueInfo()
+        {
+            return new LeagueInfo
+                {
+                    LeagueName = _league.Name
+                };
+        }
+
+
     }
 }
