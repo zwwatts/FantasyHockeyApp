@@ -1,4 +1,4 @@
-﻿namespace BusinessLayer
+﻿namespace Models
 {
     public class LeagueInfo
     {
