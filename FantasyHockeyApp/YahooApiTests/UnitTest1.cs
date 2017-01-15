@@ -12,7 +12,7 @@ namespace YahooApiTests
         public void TestMethod1()
         {
             var yahoo = new Yahoo();
-            Debug.WriteLine(yahoo.GetLeague(22381));
+            Debug.WriteLine(yahoo.GetLeague(22381).Name);
         }
     }
 }

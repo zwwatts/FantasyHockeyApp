@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -17,7 +18,11 @@ namespace YahooApi
     public class OAuthQuery
     {
         //Copy the keys and whatnot and paste them here
-        
+        private readonly string key = ConfigurationManager.AppSettings["consumer_key"];
+        private readonly string secret = ConfigurationManager.AppSettings["consumer_secret"];
+        private string token = ConfigurationManager.AppSettings["oauth_token"];
+        private string tokenSecret = ConfigurationManager.AppSettings["oauth_secret"];
+        private readonly string sessionHandle = ConfigurationManager.AppSettings["session_handle"];
 
         public OAuthQuery()
         {
