@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D90A5173-E17D-432F-BBCA-9C7E8BC0982F}</ProjectGuid>
+    <ProjectGuid>{53843DEC-D5B7-40BF-B7C4-3C599FA129E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Models</RootNamespace>
-    <AssemblyName>Models</AssemblyName>
+    <RootNamespace>BusinessLayer</RootNamespace>
+    <AssemblyName>BusinessLayer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,16 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="League.cs" />
-    <Compile Include="LeagueInfo.cs" />
-    <Compile Include="Matchup.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Position.cs" />
-    <Compile Include="Standings.cs" />
-    <Compile Include="Stat.cs" />
-    <Compile Include="StatCategory.cs" />
-    <Compile Include="Team.cs" />
+    <Compile Include="BusinessLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{D90A5173-E17D-432F-BBCA-9C7E8BC0982F}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

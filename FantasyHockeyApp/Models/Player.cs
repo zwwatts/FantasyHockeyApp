@@ -4,15 +4,15 @@ namespace Models
 {
     public class Player
     {
-        string PlayerKey { get; set; }
-        int PlayerId { get; set; }
-        string FirstName { get; set; }
-        string LastName { get; set; }
-        string EditorialTeamKey { get; set; }
-        string EditorialTeamName { get; set; }
-        string EditorialTeamAbbr { get; set; }
-        int UniformNumber { get; set; }
+        public string PlayerKey { get; set; }
+        public int PlayerId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string EditorialTeamKey { get; set; }
+        public string EditorialTeamName { get; set; }
+        public string EditorialTeamAbbr { get; set; }
+        public int UniformNumber { get; set; }
         public List<Stat> Stats { get; set; }
-        Position Position { get; set; }
+        public Position Position { get; set; }
     }
 }
