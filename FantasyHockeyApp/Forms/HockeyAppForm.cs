@@ -23,7 +23,7 @@ namespace Forms
             FillSkaters();
             FillGoalies();
 
-            //FillStandingsWithDummyData();
+            FillStandingsWithDummyData();
         }
 
         private void SetUpDataGridViews()
