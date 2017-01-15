@@ -40,8 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="League.cs" />
+    <Compile Include="Matchup.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Position.cs" />
+    <Compile Include="Standings.cs" />
+    <Compile Include="Stat.cs" />
+    <Compile Include="StatCategory.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
