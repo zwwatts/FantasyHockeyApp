@@ -54,10 +54,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{d90a5173-e17d-432f-bbca-9c7e8bc0982f}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YahooApi\YahooApi.csproj">
       <Project>{9402d8e1-71e6-474f-af97-c7f8e1b028b0}</Project>
       <Name>YahooApi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
