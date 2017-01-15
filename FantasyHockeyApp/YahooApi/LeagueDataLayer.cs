@@ -8,6 +8,7 @@ namespace YahooApi
         private readonly Yahoo _yahooApiClient = new Yahoo();
         private readonly int _leagueId;
         private League _league;
+        public int RefreshInterval { get; } = 15;
 
         public LeagueDataLayer(int leagueId)
         {
@@ -17,7 +18,7 @@ namespace YahooApi
             var timer = new System.Threading.Timer((e) =>
             {
                 RefreshData();
-            }, null, 0, (int)TimeSpan.FromMinutes(15).TotalMilliseconds);
+            }, null, 0, (int)TimeSpan.FromMinutes(RefreshInterval).TotalMilliseconds);
         }
 
         public void RefreshData()
