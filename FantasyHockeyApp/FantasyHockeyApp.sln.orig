@@ -7,12 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms", "Forms\Forms.csproj", "{27B1321E-C5D9-470C-B575-44E9E89BF3E3}"
 EndProject
+<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EC78CA22-6F4C-4818-911C-348EED1A57AE}"
+=======
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{53843DEC-D5B7-40BF-B7C4-3C599FA129E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YahooApi", "YahooApi\YahooApi.csproj", "{9402D8E1-71E6-474F-AF97-C7F8E1B028B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YahooApiTests", "YahooApiTests\YahooApiTests.csproj", "{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}"
+>>>>>>> cd7390ac1aab21f0991cbe259fd2ab40f23f783d
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +31,12 @@ Global
 		{27B1321E-C5D9-470C-B575-44E9E89BF3E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27B1321E-C5D9-470C-B575-44E9E89BF3E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27B1321E-C5D9-470C-B575-44E9E89BF3E3}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{EC78CA22-6F4C-4818-911C-348EED1A57AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC78CA22-6F4C-4818-911C-348EED1A57AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC78CA22-6F4C-4818-911C-348EED1A57AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC78CA22-6F4C-4818-911C-348EED1A57AE}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
 		{53843DEC-D5B7-40BF-B7C4-3C599FA129E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{53843DEC-D5B7-40BF-B7C4-3C599FA129E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53843DEC-D5B7-40BF-B7C4-3C599FA129E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,6 +49,7 @@ Global
 		{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> cd7390ac1aab21f0991cbe259fd2ab40f23f783d
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
