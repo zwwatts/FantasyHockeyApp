@@ -4,10 +4,10 @@ using YahooApi;
 
 namespace BusinessLayer
 {
-    public class BusinessLayer
+    public class LeagueBusinessLayer
     {
         private readonly LeagueDataLayer _dataLayer;
-        public BusinessLayer(int leagueId)
+        public LeagueBusinessLayer(int leagueId)
         {
             _dataLayer = new LeagueDataLayer(leagueId);
         }
