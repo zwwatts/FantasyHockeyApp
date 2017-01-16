@@ -1,14 +1,15 @@
 ﻿using Models;
 using System.Collections.Generic;
+using YahooApi;
 
 namespace BusinessLayer
 {
-    public class BusinessLayer
+    public class LeagueBusinessLayer
     {
-
-        public BusinessLayer()
+        private readonly LeagueDataLayer _dataLayer;
+        public LeagueBusinessLayer(int leagueId)
         {
-            
+            _dataLayer = new LeagueDataLayer(leagueId);
         }
 
         public List<Team> GetTeams()
@@ -22,8 +23,8 @@ namespace BusinessLayer
         }
 
         public LeagueInfo GetLeagueInfo()
-        { 
-            return null;
+        {
+            return _dataLayer.GetLeagueInfo();
         }
 
         public List<Standings> GetLeagueStandings()

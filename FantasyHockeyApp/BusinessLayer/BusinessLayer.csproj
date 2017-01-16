@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLayer.cs" />
+    <Compile Include="LeagueBusinessLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +48,15 @@
       <Project>{D90A5173-E17D-432F-BBCA-9C7E8BC0982F}</Project>
       <Name>Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YahooApi\YahooApi.csproj">
+      <Project>{9402D8E1-71E6-474F-AF97-C7F8E1B028B0}</Project>
+      <Name>YahooApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\App.config">
+      <Link>App.config</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
