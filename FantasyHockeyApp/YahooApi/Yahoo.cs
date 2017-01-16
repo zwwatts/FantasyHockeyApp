@@ -1,10 +1,15 @@
 ﻿using System.Text.RegularExpressions;
+using System.Xml;
 using Models;
+using Newtonsoft.Json;
 
 namespace YahooApi
 {
     public class Yahoo
     {
+        private readonly OAuthQuery _oauthQuery = new OAuthQuery();
+        private const string YahooFantasyUrl = @"http://fantasysports.yahooapis.com/fantasy/v2";
+
         public Yahoo()
         {
 
@@ -12,8 +17,7 @@ namespace YahooApi
 
         public League GetLeague(int leagueId)
         {
-            var oauthQuery = new OAuthQuery();
-            var leagueQueryResults = oauthQuery.QueryWithOAuth($"http://fantasysports.yahooapis.com/fantasy/v2/league/363.l.{leagueId}");
+            var leagueQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}");
 
             return new League
                    {

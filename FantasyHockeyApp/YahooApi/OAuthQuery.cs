@@ -114,6 +114,7 @@ namespace YahooApi
 
             using (var httpClient = new WebClient())
             {
+                Debug.WriteLine(uri.AbsoluteUri);
                 result = httpClient.DownloadString(uri.AbsoluteUri);
             }
 
