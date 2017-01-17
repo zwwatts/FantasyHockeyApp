@@ -14,7 +14,12 @@ namespace BusinessLayer
 
         public List<Team> GetTeams()
         {
-            return null;
+            return _dataLayer.GetTeams();
+        }
+
+        public Team GetTeam(int teamId)
+        {
+            return _dataLayer.GetTeam(teamId);
         }
 
         public List<Player> GetPlayers()

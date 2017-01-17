@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using BusinessLayer;
@@ -18,25 +19,22 @@ namespace Forms
             leagueName.Text = _businessLayer.GetLeagueInfo().LeagueName;
 
             SetUpDataGridViews();
-            //FillStandings();
-            FillMatchUps();
-            FillSkaters();
-            FillGoalies();
+            FillStandings();
+            FillTeamSelectionDropDown();
 
-            FillStandingsWithDummyData();
+            //FillStandingsWithDummyData();
         }
 
         private void SetUpDataGridViews()
         {
             //Standings
             standingsDataGridView.ColumnCount = 7;
-            standingsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
-            standingsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            standingsDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            //standingsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+            //standingsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            //standingsDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
             standingsDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
             standingsDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            standingsDataGridView.GridColor = Color.Black;
-            standingsDataGridView.RowHeadersVisible = false;
+            //standingsDataGridView.GridColor = Color.Black;
             standingsDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             standingsDataGridView.MultiSelect = false;
             
@@ -83,7 +81,7 @@ namespace Forms
             SkaterDataGridView.Columns[2].Name = "NHL Team";
             SkaterDataGridView.Columns[3].Name = "Uniform Number";
             SkaterDataGridView.Columns[4].Name = "Position";
-            SkaterDataGridView.Columns[5].Name = "stats";
+            SkaterDataGridView.Columns[5].Name = "stats"; 
 
             //Goalies
             goalieDataGridView.ColumnCount = 6;
@@ -126,17 +124,70 @@ namespace Forms
 
         private void FillMatchUps()
         {
-           
+            //foreach (var matchup in _businessLayer.GetMatchups())
+            //{
+            //    object[] row = {
+            //        matchup.Teams[0].Name,
+            //        matchup.Teams[0].WeekScore,
+            //        "vs",
+            //        matchup.Teams[1].WeekScore,
+            //        matchup.Teams[1].Name
+            //    };
+                
+            //    matchupDataGridView.Rows.Add(row);
+            //}
         }
 
-        private void FillSkaters()
+        private void FillSkaters(int team)
         {
-           
+            foreach (var player in _businessLayer.GetTeam(team).Skaters)
+            {
+                object[] row =
+                {
+                    player.FirstName,
+                    player.LastName,
+                    player.EditorialTeamName,
+                    player.Position,
+                    "Stats"
+                };
+
+                SkaterDataGridView.Rows.Add(row);
+            }
         }
 
-        private void FillGoalies()
+        private void FillGoalies(int team)
         {
-            
+            foreach (var player in _businessLayer.GetTeam(team).Goalies)
+            {
+                object[] row =
+                {
+                    player.FirstName,
+                    player.LastName,
+                    player.EditorialTeamName,
+                    player.Position,
+                    "Stats"
+                };
+
+                goalieDataGridView.Rows.Add(row);
+            }
+        }
+
+        private void FillTeamSelectionDropDown()
+        {
+            teamComboBox.DataSource = _businessLayer.GetTeams();
+            teamComboBox.DisplayMember = "Name";
+            teamComboBox.ValueMember = "TeamId";
+            teamComboBox.SelectedIndexChanged += new EventHandler(teamComboBoxEventHandler); 
+        }
+
+        private void teamComboBoxEventHandler(object sender, EventArgs e)
+        {
+            var teamBox = (ComboBox) sender;
+            var teamId = (int) teamBox.SelectedValue;
+
+            Debug.WriteLine(teamBox.SelectedValue);
+            //FillSkaters(teamId);
+            //FillGoalies(teamId);
         }
 
         private void FillStandingsWithDummyData()

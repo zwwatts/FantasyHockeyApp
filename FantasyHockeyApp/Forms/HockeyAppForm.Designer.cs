@@ -100,6 +100,7 @@
             this.standingsDataGridView.Margin = new System.Windows.Forms.Padding(4);
             this.standingsDataGridView.Name = "standingsDataGridView";
             this.standingsDataGridView.ReadOnly = true;
+            this.standingsDataGridView.RowHeadersVisible = false;
             this.standingsDataGridView.Size = new System.Drawing.Size(966, 374);
             this.standingsDataGridView.TabIndex = 0;
             // 
@@ -123,6 +124,7 @@
             this.matchupDataGridView.Margin = new System.Windows.Forms.Padding(4);
             this.matchupDataGridView.Name = "matchupDataGridView";
             this.matchupDataGridView.ReadOnly = true;
+            this.matchupDataGridView.RowHeadersVisible = false;
             this.matchupDataGridView.Size = new System.Drawing.Size(966, 374);
             this.matchupDataGridView.TabIndex = 0;
             // 
@@ -151,6 +153,7 @@
             this.goalieDataGridView.Location = new System.Drawing.Point(3, 189);
             this.goalieDataGridView.Name = "goalieDataGridView";
             this.goalieDataGridView.ReadOnly = true;
+            this.goalieDataGridView.RowHeadersVisible = false;
             this.goalieDataGridView.RowTemplate.Height = 24;
             this.goalieDataGridView.Size = new System.Drawing.Size(968, 190);
             this.goalieDataGridView.TabIndex = 5;
@@ -205,6 +208,7 @@
             this.SkaterDataGridView.Margin = new System.Windows.Forms.Padding(4);
             this.SkaterDataGridView.Name = "SkaterDataGridView";
             this.SkaterDataGridView.ReadOnly = true;
+            this.SkaterDataGridView.RowHeadersVisible = false;
             this.SkaterDataGridView.Size = new System.Drawing.Size(968, 87);
             this.SkaterDataGridView.TabIndex = 0;
             // 
