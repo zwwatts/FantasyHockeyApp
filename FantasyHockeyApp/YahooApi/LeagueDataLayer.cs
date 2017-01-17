@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Models;
 
 namespace YahooApi
@@ -35,6 +36,20 @@ namespace YahooApi
                 };
         }
 
+        public List<Team> GetTeams()
+        {
+            return _league.Teams;
+        }
+
+        public Team GetTeam(int teamId)
+        {
+            Team result = null;
+            foreach (var team in _league.Teams)
+            {
+                result = team.TeamId == teamId ? team : null;
+            }
+            return result;
+        }
 
     }
 }
