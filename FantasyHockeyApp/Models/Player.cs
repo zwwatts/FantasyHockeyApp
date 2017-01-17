@@ -13,6 +13,6 @@ namespace Models
         public string EditorialTeamAbbr { get; set; }
         public int UniformNumber { get; set; }
         public List<Stat> Stats { get; set; }
-        public Position Position { get; set; }
+        public string Position { get; set; }
     }
 }

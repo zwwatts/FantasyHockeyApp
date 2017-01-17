@@ -120,6 +120,30 @@ namespace YahooApi
                                         }).ToList();
         }
 
+        public List<Player> GetPlayers(int leagueId, int teamId)
+        {
+            var teamRosterQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}/roster");
+            var jsonResponse = XmlToJObject(teamRosterQueryResults);
+            var players = jsonResponse["fantasy_content"]["team"]["roster"]["players"]["player"];
+            var playersToReturn = new List<Player>();
+            foreach (var player in players)
+            {
+                playersToReturn.Add(new Player
+                                    {
+                                        PlayerId = (int)player["player_id"],
+                                        PlayerKey = (string)player["player_key"],
+                                        Position = (string)player["position_type"],
+                                        EditorialTeamAbbr = (string)player["editorial_team_abbr"],
+                                        EditorialTeamKey = (string)player["editorial_team_key"],
+                                        EditorialTeamName = (string)player["editorial_team_full_name"],
+                                        UniformNumber = (int)player["uniform_number"],
+                                        FirstName = (string)player["name"]["first"],
+                                        LastName = (string)player["name"]["last"],
+                });
+            }
+            return playersToReturn;
+        }
+
         public List<Matchup> GetMatchups(int leagueId)
         {
             var matchups = new List<Matchup>();
