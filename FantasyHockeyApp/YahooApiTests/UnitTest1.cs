@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using YahooApi;
 
@@ -21,6 +22,23 @@ namespace YahooApiTests
                 Debug.WriteLine($"W-L-T: {team.Standings.Wins}-{team.Standings.Losses}-{team.Standings.Ties}");
                 Debug.WriteLine($"Points For: {team.Standings.PointsFor}");
                 Debug.WriteLine($"Points Against: {team.Standings.PointsAgainst}");
+                var goalsScored = 0;
+                var statId = 0;
+                foreach (var stat in league.StatCategories)
+                {
+                    if (stat.Name == "Goals")
+                    {
+                        statId = stat.StatCategoryId;
+                    }
+                }
+                foreach (var stat in team.TotalStats)
+                {
+                    if (stat.StatCategoryId == statId)
+                    {
+                        goalsScored = stat.Quantity;
+                    }
+                }
+                Debug.WriteLine($"Goals Scored: {goalsScored}");
                 Debug.WriteLine("------ TEAM END ------");
 
             }

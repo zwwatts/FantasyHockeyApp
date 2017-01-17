@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public double ModifierValue { get; set; }
+        public string PositionType { get; set; }
     }
 }
