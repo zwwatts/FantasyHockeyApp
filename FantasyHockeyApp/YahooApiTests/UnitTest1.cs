@@ -13,9 +13,11 @@ namespace YahooApiTests
         public void TestMethod1()
         {
             var yahoo = new Yahoo();
+            
             var league = yahoo.GetLeague(22381);
             foreach (var team in league.Teams)
             {
+                var roster = yahoo.GetPlayers(league.LeagueId, team.TeamId);
                 Debug.WriteLine("------ TEAM START ------");
                 Debug.WriteLine($"Name: {team.Name}");
                 Debug.WriteLine($"Rank: {team.Standings.Rank}");
