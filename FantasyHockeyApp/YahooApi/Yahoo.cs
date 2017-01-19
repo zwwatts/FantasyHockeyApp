@@ -53,19 +53,7 @@ namespace YahooApi
             var jsonResponse = XmlToJObject(standingsQueryResults);
             var teamsJson = jsonResponse["fantasy_content"]["league"]["standings"]["teams"]["team"];
             var totalStats = new List<Stat>();
-            foreach (var team in teamsJson)
-            {
-                var stats = team["team_stats"]["stats"]["stat"];
-                Debug.WriteLine(stats[0]["value"]);
-                foreach (var stat in stats)
-                {
-                    totalStats.Add(new Stat
-                                   {
-                                       Quantity = (int)stat["value"],
-                                       StatCategoryId = (int)stat["stat_id"]
-                                   });
-                }
-            }
+            
             return teamsJson.Select(team => new Team
                                             {
                                                 Name = team["name"].ToString(),
