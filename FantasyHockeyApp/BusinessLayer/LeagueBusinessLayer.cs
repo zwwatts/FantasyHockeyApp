@@ -36,5 +36,10 @@ namespace BusinessLayer
         {
             return null;
         }
+
+        public List<Matchup> GetWeeklyMatchups()
+        {
+            return _dataLayer.GetWeeklyMatchups();
+        }
     }
 }

@@ -51,5 +51,10 @@ namespace YahooApi
             return result;
         }
 
+        public List<Matchup> GetWeeklyMatchups()
+        {
+            return _league.Matchups;
+        }
+
     }
 }
