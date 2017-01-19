@@ -14,5 +14,6 @@ namespace Models
         public int UniformNumber { get; set; }
         public List<Stat> Stats { get; set; }
         public string Position { get; set; }
+        public string PositionType { get; set; }
     }
 }
