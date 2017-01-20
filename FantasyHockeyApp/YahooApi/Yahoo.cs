@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -13,11 +12,6 @@ namespace YahooApi
     {
         private readonly OAuthQuery _oauthQuery = new OAuthQuery();
         private const string YahooFantasyUrl = @"http://fantasysports.yahooapis.com/fantasy/v2";
-
-        public Yahoo()
-        {
-
-        }
 
         public League GetLeague(int leagueId)
         {
