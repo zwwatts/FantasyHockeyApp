@@ -20,6 +20,7 @@ namespace Forms
             SetUpDataGridViews();
             FillStandings();
             FillTeamSelectionDropDown();
+            FillMatchUps();
 
             //FillStandingsWithDummyData();
         }
@@ -84,18 +85,18 @@ namespace Forms
 
         private void FillMatchUps()
         {
-            //foreach (var matchup in _businessLayer.GetMatchups())
-            //{
-            //    object[] row = {
-            //        matchup.Teams[0].Name,
-            //        matchup.Teams[0].WeekScore,
-            //        "vs",
-            //        matchup.Teams[1].WeekScore,
-            //        matchup.Teams[1].Name
-            //    };
-                
-            //    matchupDataGridView.Rows.Add(row);
-            //}
+            foreach (var matchup in _businessLayer.GetWeeklyMatchups())
+            {
+                object[] row = {
+                    matchup.Teams[0].Name,
+                    matchup.CurrentScore[matchup.Teams[0].TeamId],
+                    "vs",
+                    matchup.CurrentScore[matchup.Teams[1].TeamId],
+                    matchup.Teams[1].Name
+                };
+
+                matchupDataGridView.Rows.Add(row);
+            }
         }
 
         private void FillSkaters(int team)
@@ -152,23 +153,6 @@ namespace Forms
             Debug.WriteLine(teamBox.SelectedValue);
             FillSkaters(teamId);
             FillGoalies(teamId);
-        }
-
-        private void FillStandingsWithDummyData()
-        {
-            object[] row0 = { "1", "Team1", "11", "1", "0", "2000", "0" };
-            object[] row1 = { "2", "Team2", "10", "2", "0", "1900", "100" };
-            object[] row2 = { "3", "Team3", "9", "3", "0", "1800", "200" };
-            object[] row3 = { "4", "Team4", "8", "4", "0", "1700", "300" };
-            object[] row4 = { "5", "Team5", "7", "5", "0", "1600", "400" };
-            object[] row5 = { "6", "Team6", "6", "6", "0", "1500", "500" };
-
-            standingsDataGridView.Rows.Add(row0);
-            standingsDataGridView.Rows.Add(row1);
-            standingsDataGridView.Rows.Add(row2);
-            standingsDataGridView.Rows.Add(row3);
-            standingsDataGridView.Rows.Add(row4);
-            standingsDataGridView.Rows.Add(row5);
         }
     }
 }
