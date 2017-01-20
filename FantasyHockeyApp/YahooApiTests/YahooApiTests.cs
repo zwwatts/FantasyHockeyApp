@@ -1,20 +1,25 @@
-﻿using System;
-using System.CodeDom;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Models;
+using Newtonsoft.Json;
 using YahooApi;
 
 namespace YahooApiTests
 {
     [TestClass]
-    public class UnitTest1
+    public class YahooApiTests
     {
         private Yahoo _yahoo;
 
         [TestInitialize()]
         public void Initialize() => _yahoo = new Yahoo();
+
+        [TestMethod]
+        public void TestingLeagueJson()
+        {
+            var league = _yahoo.GetLeague(22381);
+            Debug.WriteLine(JsonConvert.SerializeObject(league));
+        }
 
         [TestMethod]
         public void TestMethod1()
