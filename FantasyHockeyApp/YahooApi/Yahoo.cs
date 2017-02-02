@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.Linq;
 using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,12 +19,14 @@ namespace YahooApi
         public League GetLeague(int leagueId)
         {
             var leagueQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}");
+            var jsonResponse = XmlToJObject(leagueQueryResults);
+            var leagueJson = jsonResponse["fantasy_content"]["league"];
 
             return new League
             {
                 LeagueId = leagueId,
-                LeagueKey = Regex.Match(leagueQueryResults, @"<league_key>(.+?)</league_key>").Groups[1].Value,
-                Name = Regex.Match(leagueQueryResults, @"<name>(.+?)</name>").Groups[1].Value,
+                LeagueKey = leagueJson["league_key"].ToString(),
+                Name = leagueJson["name"].ToString(),
                 Teams = GetTeams(leagueId),
                 StatCategories = GetStatCategories(leagueId),
                 Matchups = GetMatchups(leagueId)
@@ -31,13 +36,15 @@ namespace YahooApi
         public Team GetTeam(int leagueId, int teamId)
         {
             var teamQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}");
+            var jsonResponse = XmlToJObject(teamQueryResults);
+            var teamJson = jsonResponse["fantasy_content"]["team"];
             var allPlayers = GetPlayers(leagueId, teamId);
 
             return new Team
             {
-                Name = Regex.Match(teamQueryResults, @"<name>(.+?)</name>").Groups[1].Value,
+                Name = teamJson["name"].ToString(),
                 TeamId = teamId,
-                TeamKey = Regex.Match(teamQueryResults, @"<team_key>(.+?)</team_key>").Groups[1].Value,
+                TeamKey = teamJson["team_key"].ToString(),
                 Standings = GetStandings(leagueId, teamId),
                 Skaters = allPlayers.Where(player => player.PositionType == "P").ToList(),
                 Goalies = allPlayers.Where(player => player.PositionType == "G").ToList()
@@ -77,13 +84,18 @@ namespace YahooApi
         public Standings GetStandings(int leagueId, int teamId)
         {
             var standingsQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/standings");
+            //var xdoc = XDocument.Parse(standingsQueryResults);
+            //XNamespace ns = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng";
+            //var teams = xdoc.Descendants(ns + "team");
             var jsonResponse = XmlToJObject(standingsQueryResults);
             var teams = jsonResponse["fantasy_content"]["league"]["standings"]["teams"]["team"];
             return (from team in teams
+                        //where team.Attribute("team_id")?.Value == teamId.ToString()
                     where team["team_id"].ToString() == teamId.ToString()
                     select new Standings
                     {
                         Wins = (int)team["team_standings"]["outcome_totals"]["wins"],
+                        //Wins = Convert.ToInt32(team.Descendants(ns + "outcome_totals").First().Element(ns + "wins")?.Value),
                         Losses = (int)team["team_standings"]["outcome_totals"]["losses"],
                         Ties = (int)team["team_standings"]["outcome_totals"]["ties"],
                         Rank = (int)team["team_standings"]["rank"],
@@ -113,9 +125,9 @@ namespace YahooApi
 
         public List<Player> GetPlayers(int leagueId, int teamId)
         {
-            var teamRosterQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}/roster");
+            var teamRosterQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}/players/stats");
             var jsonResponse = XmlToJObject(teamRosterQueryResults);
-            var players = jsonResponse["fantasy_content"]["team"]["roster"]["players"]["player"];
+            var players = jsonResponse["fantasy_content"]["team"]["players"]["player"];
             return players.Select(player => new Player
             {
                 PlayerId = (int)player["player_id"],
@@ -128,6 +140,11 @@ namespace YahooApi
                 UniformNumber = (int)player["uniform_number"],
                 FirstName = (string)player["name"]["first"],
                 LastName = (string)player["name"]["last"],
+                Stats = player["player_stats"]["stats"]["stat"].Select(stat => new Stat
+                {
+                    Quantity = (int)stat["value"],
+                    StatCategoryId = (int)stat["stat_id"]
+                }).ToList()
             }).ToList();
         }
 
