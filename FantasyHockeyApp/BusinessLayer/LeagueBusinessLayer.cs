@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using System;
+using Models;
 using System.Collections.Generic;
 using YahooApi;
 
@@ -11,6 +12,8 @@ namespace BusinessLayer
         {
             _dataLayer = new LeagueDataLayer(leagueId);
         }
+
+        public event Action LeagueDataUpdated;
 
         public List<Team> GetTeams()
         {

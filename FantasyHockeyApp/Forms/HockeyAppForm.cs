@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using BusinessLayer;
 
@@ -21,7 +21,9 @@ namespace Forms
             FillStandings();
             FillTeamSelectionDropDown();
             FillMatchUps();
-
+            var initialTeamToDisplay = _businessLayer.GetTeams().First().TeamId;
+            FillGoalies(initialTeamToDisplay);
+            FillSkaters(initialTeamToDisplay);
             //FillStandingsWithDummyData();
         }
 
@@ -150,7 +152,6 @@ namespace Forms
             var teamBox = (ComboBox) sender;
             var teamId = (int) teamBox.SelectedValue;
 
-            Debug.WriteLine(teamBox.SelectedValue);
             FillSkaters(teamId);
             FillGoalies(teamId);
         }

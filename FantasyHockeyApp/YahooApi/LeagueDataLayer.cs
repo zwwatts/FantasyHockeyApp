@@ -19,14 +19,35 @@ namespace YahooApi
             RefreshData();
             // from http://stackoverflow.com/questions/13019433/calling-method-on-every-x-minutes
             var timer = new System.Threading.Timer((e) =>
-            {
-                RefreshData();
-            }, null, 0, (int)TimeSpan.FromMinutes(RefreshInterval).TotalMilliseconds);
+                                                   {
+                                                       RefreshData();
+                                                   }, null, 0, (int) TimeSpan.FromMinutes(RefreshInterval).TotalMilliseconds);
         }
+
+        public event Action LeagueDataUpdated;
 
         public void RefreshData()
         {
             _league = _yahooApiClient.GetLeague(_leagueId);
+            FireUpdateEvent();
+        }
+
+        private void FireUpdateEvent()
+        {
+            var handlers = LeagueDataUpdated;
+            foreach (var handler in handlers.GetInvocationList())
+            {
+                try
+                {
+                    var action = (Action) handler;
+                    action();
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
         }
 
         public LeagueInfo GetLeagueInfo()
