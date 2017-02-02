@@ -142,5 +142,19 @@ namespace YahooApiTests
             Assert.AreEqual(2, matchup.Teams.Count);
             Assert.AreEqual(2, matchup.CurrentScore.Count);
         }
+
+        [TestMethod]
+        public void Yahoo_GetStandings_StandingsAreCorrect()
+        {
+            var standings = _yahoo.GetStandings(22381, 1);
+            Assert.AreEqual(10, standings.Wins);
+        }
+
+        [TestMethod]
+        public void Yahoo_GetPlayers_PlayersAreCorrect()
+        {
+            var players = _yahoo.GetPlayers(22381, 1);
+            Assert.IsTrue(players.Count >= 16);
+        }
     }
 }
