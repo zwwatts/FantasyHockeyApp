@@ -19,12 +19,14 @@ namespace YahooApi
         public League GetLeague(int leagueId)
         {
             var leagueQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}");
+            var jsonResponse = XmlToJObject(leagueQueryResults);
+            var leagueJson = jsonResponse["fantasy_content"]["league"];
 
             return new League
             {
                 LeagueId = leagueId,
-                LeagueKey = Regex.Match(leagueQueryResults, @"<league_key>(.+?)</league_key>").Groups[1].Value,
-                Name = Regex.Match(leagueQueryResults, @"<name>(.+?)</name>").Groups[1].Value,
+                LeagueKey = leagueJson["league_key"].ToString(),
+                Name = leagueJson["name"].ToString(),
                 Teams = GetTeams(leagueId),
                 StatCategories = GetStatCategories(leagueId),
                 Matchups = GetMatchups(leagueId)
@@ -34,13 +36,15 @@ namespace YahooApi
         public Team GetTeam(int leagueId, int teamId)
         {
             var teamQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}");
+            var jsonResponse = XmlToJObject(teamQueryResults);
+            var teamJson = jsonResponse["fantasy_content"]["team"];
             var allPlayers = GetPlayers(leagueId, teamId);
 
             return new Team
             {
-                Name = Regex.Match(teamQueryResults, @"<name>(.+?)</name>").Groups[1].Value,
+                Name = teamJson["name"].ToString(),
                 TeamId = teamId,
-                TeamKey = Regex.Match(teamQueryResults, @"<team_key>(.+?)</team_key>").Groups[1].Value,
+                TeamKey = teamJson["team_key"].ToString(),
                 Standings = GetStandings(leagueId, teamId),
                 Skaters = allPlayers.Where(player => player.PositionType == "P").ToList(),
                 Goalies = allPlayers.Where(player => player.PositionType == "G").ToList()

@@ -156,5 +156,12 @@ namespace YahooApiTests
             var players = _yahoo.GetPlayers(22381, 1);
             Assert.IsTrue(players.Count >= 16);
         }
+
+        [TestMethod]
+        public void Yahoo_GetTeam_TeamIsCorrect()
+        {
+            var team = _yahoo.GetTeam(22381, 1);
+            Assert.AreEqual("Rubber Puckies", team.Name);
+        }
     }
 }
