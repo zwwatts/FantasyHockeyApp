@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 using BusinessLayer;
 
@@ -21,6 +20,7 @@ namespace Forms
             SetUpDataGridViews();
             FillStandings();
             FillTeamSelectionDropDown();
+            FillMatchUps();
 
             //FillStandingsWithDummyData();
         }
@@ -29,15 +29,6 @@ namespace Forms
         {
             //Standings
             standingsDataGridView.ColumnCount = 7;
-            //standingsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
-            //standingsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            //standingsDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            standingsDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
-            standingsDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            //standingsDataGridView.GridColor = Color.Black;
-            standingsDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            standingsDataGridView.MultiSelect = false;
-            
             standingsDataGridView.Columns[0].Name = "Rank";
             standingsDataGridView.Columns[1].Name = "Team Name";
             standingsDataGridView.Columns[2].Name = "Wins";
@@ -48,16 +39,6 @@ namespace Forms
 
             //Match Ups
             matchupDataGridView.ColumnCount = 5;
-            matchupDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
-            matchupDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            matchupDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            matchupDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
-            matchupDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            matchupDataGridView.GridColor = Color.Black;
-            matchupDataGridView.RowHeadersVisible = false;
-            matchupDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            matchupDataGridView.MultiSelect = false;
-
             matchupDataGridView.Columns[0].Name = "Team Name";
             matchupDataGridView.Columns[1].Name = "Score";
             matchupDataGridView.Columns[2].Name = "-";
@@ -66,16 +47,6 @@ namespace Forms
 
             //Skaters
             SkaterDataGridView.ColumnCount = 6;
-            SkaterDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
-            SkaterDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            SkaterDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            SkaterDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
-            SkaterDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            SkaterDataGridView.GridColor = Color.Black;
-            SkaterDataGridView.RowHeadersVisible = false;
-            SkaterDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            SkaterDataGridView.MultiSelect = false;
-
             SkaterDataGridView.Columns[0].Name = "First Name";
             SkaterDataGridView.Columns[1].Name = "Last Name";
             SkaterDataGridView.Columns[2].Name = "NHL Team";
@@ -85,16 +56,6 @@ namespace Forms
 
             //Goalies
             goalieDataGridView.ColumnCount = 6;
-            goalieDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
-            goalieDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            goalieDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            goalieDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
-            goalieDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            goalieDataGridView.GridColor = Color.Black;
-            goalieDataGridView.RowHeadersVisible = false;
-            goalieDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            goalieDataGridView.MultiSelect = false;
-
             goalieDataGridView.Columns[0].Name = "First Name";
             goalieDataGridView.Columns[1].Name = "Last Name";
             goalieDataGridView.Columns[2].Name = "NHL Team";
@@ -124,22 +85,23 @@ namespace Forms
 
         private void FillMatchUps()
         {
-            //foreach (var matchup in _businessLayer.GetMatchups())
-            //{
-            //    object[] row = {
-            //        matchup.Teams[0].Name,
-            //        matchup.Teams[0].WeekScore,
-            //        "vs",
-            //        matchup.Teams[1].WeekScore,
-            //        matchup.Teams[1].Name
-            //    };
-                
-            //    matchupDataGridView.Rows.Add(row);
-            //}
+            foreach (var matchup in _businessLayer.GetWeeklyMatchups())
+            {
+                object[] row = {
+                    matchup.Teams[0].Name,
+                    matchup.CurrentScore[matchup.Teams[0].TeamId],
+                    "vs",
+                    matchup.CurrentScore[matchup.Teams[1].TeamId],
+                    matchup.Teams[1].Name
+                };
+
+                matchupDataGridView.Rows.Add(row);
+            }
         }
 
         private void FillSkaters(int team)
         {
+            SkaterDataGridView.Rows.Clear();
             foreach (var player in _businessLayer.GetTeam(team).Skaters)
             {
                 object[] row =
@@ -147,6 +109,7 @@ namespace Forms
                     player.FirstName,
                     player.LastName,
                     player.EditorialTeamName,
+                    player.UniformNumber,
                     player.Position,
                     "Stats"
                 };
@@ -157,6 +120,7 @@ namespace Forms
 
         private void FillGoalies(int team)
         {
+            goalieDataGridView.Rows.Clear();
             foreach (var player in _businessLayer.GetTeam(team).Goalies)
             {
                 object[] row =
@@ -164,6 +128,7 @@ namespace Forms
                     player.FirstName,
                     player.LastName,
                     player.EditorialTeamName,
+                    player.UniformNumber,
                     player.Position,
                     "Stats"
                 };
@@ -177,7 +142,7 @@ namespace Forms
             teamComboBox.DataSource = _businessLayer.GetTeams();
             teamComboBox.DisplayMember = "Name";
             teamComboBox.ValueMember = "TeamId";
-            teamComboBox.SelectedIndexChanged += new EventHandler(teamComboBoxEventHandler); 
+            teamComboBox.SelectedIndexChanged += teamComboBoxEventHandler; 
         }
 
         private void teamComboBoxEventHandler(object sender, EventArgs e)
@@ -186,30 +151,8 @@ namespace Forms
             var teamId = (int) teamBox.SelectedValue;
 
             Debug.WriteLine(teamBox.SelectedValue);
-            //FillSkaters(teamId);
-            //FillGoalies(teamId);
-        }
-
-        private void FillStandingsWithDummyData()
-        {
-            object[] row0 = { "1", "Team1", "11", "1", "0", "2000", "0" };
-            object[] row1 = { "2", "Team2", "10", "2", "0", "1900", "100" };
-            object[] row2 = { "3", "Team3", "9", "3", "0", "1800", "200" };
-            object[] row3 = { "4", "Team4", "8", "4", "0", "1700", "300" };
-            object[] row4 = { "5", "Team5", "7", "5", "0", "1600", "400" };
-            object[] row5 = { "6", "Team6", "6", "6", "0", "1500", "500" };
-
-            standingsDataGridView.Rows.Add(row0);
-            standingsDataGridView.Rows.Add(row1);
-            standingsDataGridView.Rows.Add(row2);
-            standingsDataGridView.Rows.Add(row3);
-            standingsDataGridView.Rows.Add(row4);
-            standingsDataGridView.Rows.Add(row5);
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            FillSkaters(teamId);
+            FillGoalies(teamId);
         }
     }
 }
