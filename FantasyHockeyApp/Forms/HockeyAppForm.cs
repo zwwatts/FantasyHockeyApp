@@ -14,7 +14,7 @@ namespace Forms
         {
             InitializeComponent();
 
-            _businessLayer = new LeagueBusinessLayer();
+            _businessLayer = new LeagueBusinessLayer(22381);
             _businessLayer.LeagueDataUpdated += PopulateUi;
         }
 
@@ -133,17 +133,17 @@ namespace Forms
             SkaterDataGridView.Rows.Clear();
             foreach (var player in _businessLayer.GetTeam(team).Skaters)
             {
-                var dataRow = new List<object>
+                var dataRow = new List<string>
                 {
                     player.FirstName,
                     player.LastName,
                     player.EditorialTeamName,
-                    player.UniformNumber,
+                    player.UniformNumber.ToString(),
                     player.Position
                 };
 
-                dataRow.AddRange(player.Stats.Select(stat => stat.Quantity).Cast<object>());
-                SkaterDataGridView.Rows.Add(dataRow);
+                dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
+                SkaterDataGridView.Rows.Add(dataRow.ToArray());
             }
         }
 
@@ -152,17 +152,17 @@ namespace Forms
             goalieDataGridView.Rows.Clear();
             foreach (var player in _businessLayer.GetTeam(team).Goalies)
             {
-                var dataRow = new List<object>
+                var dataRow = new List<string>
                 {
                     player.FirstName,
                     player.LastName,
                     player.EditorialTeamName,
-                    player.UniformNumber,
+                    player.UniformNumber.ToString(),
                     player.Position
                 };
-                dataRow.AddRange(player.Stats.Select(stat => stat.Quantity).Cast<object>());
+                dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
 
-                goalieDataGridView.Rows.Add(dataRow);
+                goalieDataGridView.Rows.Add(dataRow.ToArray());
             }
         }
 
