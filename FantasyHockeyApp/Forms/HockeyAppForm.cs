@@ -13,10 +13,19 @@ namespace Forms
         {
             InitializeComponent();
 
-             _businessLayer = new LeagueBusinessLayer(22381);
+            _businessLayer = new LeagueBusinessLayer(22381);
+            _businessLayer.LeagueDataUpdated += PopulateUi;
+        }
 
+        public void PopulateUi(int leagueId)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke((Action<int>) PopulateUi, leagueId);
+                return;
+            }
+            _businessLayer.SetLeagueId(leagueId);
             leagueName.Text = _businessLayer.GetLeagueInfo().LeagueName;
-
             SetUpDataGridViews();
             FillStandings();
             FillTeamSelectionDropDown();
@@ -24,7 +33,6 @@ namespace Forms
             var initialTeamToDisplay = _businessLayer.GetTeams().First().TeamId;
             FillGoalies(initialTeamToDisplay);
             FillSkaters(initialTeamToDisplay);
-            //FillStandingsWithDummyData();
         }
 
         private void SetUpDataGridViews()
@@ -68,7 +76,8 @@ namespace Forms
 
         private void FillStandings()
         {
-            foreach(var team in _businessLayer.GetTeams())
+            standingsDataGridView.Rows.Clear();
+            foreach (var team in _businessLayer.GetTeams())
             {
                 object[] row = {
                     team.Standings.Rank,
@@ -87,6 +96,7 @@ namespace Forms
 
         private void FillMatchUps()
         {
+            matchupDataGridView.Rows.Clear();
             foreach (var matchup in _businessLayer.GetWeeklyMatchups())
             {
                 object[] row = {
@@ -155,5 +165,7 @@ namespace Forms
             FillSkaters(teamId);
             FillGoalies(teamId);
         }
+
+        private void leagueIDSubmit_Click(object sender, EventArgs e) => PopulateUi((int)leagueIDNumeric.Value);
     }
 }

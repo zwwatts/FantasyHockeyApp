@@ -151,11 +151,15 @@ namespace YahooApiTests
         [TestMethod]
         public void Yahoo_GetPlayers_PlayersAreCorrect()
         {
-            var players = _yahoo.GetPlayers(21165, 1);
+            var players = _yahoo.GetPlayers(22381, 1);
             Debug.WriteLine(players.Count);
             foreach (var player in players)
             {
                 Debug.WriteLine($"{player.LastName} : {player.Stats[0].Quantity}");
+            }
+            foreach (var stat in players[0].Stats)
+            {
+                Debug.WriteLine(stat.Quantity);
             }
             Assert.IsTrue(players.Count >= 16);
             

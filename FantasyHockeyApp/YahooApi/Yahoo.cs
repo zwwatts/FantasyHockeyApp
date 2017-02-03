@@ -19,13 +19,14 @@ namespace YahooApi
         public League GetLeague(int leagueId)
         {
             var leagueQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}");
-            var league = XmlToXmlDocument(leagueQueryResults);
+            var jsonResponse = XmlToJObject(leagueQueryResults);
+            var leagueJson = jsonResponse["fantasy_content"]["league"];
 
             return new League
             {
                 LeagueId = leagueId,
-                LeagueKey = league.SelectSingleNode("//fantasy_content/league/league_key")?.InnerText,
-                Name = league.SelectSingleNode("//fantasy_content/league/name")?.InnerText,
+                LeagueKey = leagueJson["league_key"].ToString(),
+                Name = leagueJson["name"].ToString(),
                 Teams = GetTeams(leagueId),
                 StatCategories = GetStatCategories(leagueId),
                 Matchups = GetMatchups(leagueId)
@@ -35,14 +36,15 @@ namespace YahooApi
         public Team GetTeam(int leagueId, int teamId)
         {
             var teamQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}");
-            var team = XmlToXmlDocument(teamQueryResults);
+            var jsonResponse = XmlToJObject(teamQueryResults);
+            var teamJson = jsonResponse["fantasy_content"]["team"];
             var allPlayers = GetPlayers(leagueId, teamId);
 
             return new Team
             {
-                Name = team.SelectSingleNode("//fantasy_content/team/name")?.InnerText,
+                Name = teamJson["name"].ToString(),
                 TeamId = teamId,
-                TeamKey = team.SelectSingleNode("//fantasy_content/team/team_key")?.InnerText,
+                TeamKey = teamJson["team_key"].ToString(),
                 Standings = GetStandings(leagueId, teamId),
                 Skaters = allPlayers.Where(player => player.PositionType == "P").ToList(),
                 Goalies = allPlayers.Where(player => player.PositionType == "G").ToList()
@@ -126,7 +128,6 @@ namespace YahooApi
             var teamRosterQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}/players/stats");
             var jsonResponse = XmlToJObject(teamRosterQueryResults);
             var players = jsonResponse["fantasy_content"]["team"]["players"]["player"];
-
             return players.Select(player => new Player
             {
                 PlayerId = (int)player["player_id"],
@@ -141,11 +142,10 @@ namespace YahooApi
                 LastName = (string)player["name"]["last"],
                 Stats = player["player_stats"]["stats"]["stat"].Select(stat => new Stat
                 {
-                    Quantity = (int)stat["value"],
+                    Quantity = stat["value"].ToString() == "-" ? 0 : (int)stat["value"],
                     StatCategoryId = (int)stat["stat_id"]
                 }).ToList()
             }).ToList();
-
         }
 
         public List<Matchup> GetMatchups(int leagueId)
@@ -175,13 +175,6 @@ namespace YahooApi
             xmlDoc.LoadXml(xmlResponse);
             var json = JsonConvert.SerializeXmlNode(xmlDoc);
             return JsonConvert.DeserializeObject<JObject>(json);
-        }
-
-        private XmlDocument XmlToXmlDocument(string xml)
-        {
-            var xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            return xmlDoc;
         }
 
     }
