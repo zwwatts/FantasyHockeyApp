@@ -143,7 +143,7 @@ namespace Forms
                 };
 
                 dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
-                SkaterDataGridView.Rows.Add(dataRow.ToArray());
+                SkaterDataGridView.Rows.Add(dataRow.ToArray<object>());
             }
         }
 
@@ -162,7 +162,7 @@ namespace Forms
                 };
                 dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
 
-                goalieDataGridView.Rows.Add(dataRow.ToArray());
+                goalieDataGridView.Rows.Add(dataRow.ToArray<object>());
             }
         }
 
