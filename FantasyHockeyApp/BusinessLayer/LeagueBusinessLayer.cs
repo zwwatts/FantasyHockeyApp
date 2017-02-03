@@ -1,6 +1,7 @@
 ﻿using System;
 using Models;
 using System.Collections.Generic;
+using System.Linq;
 using YahooApi;
 
 namespace BusinessLayer
@@ -8,6 +9,9 @@ namespace BusinessLayer
     public class LeagueBusinessLayer
     {
         private readonly LeagueDataLayer _dataLayer;
+        private const string GoalieCode = "G";
+        private const string SkaterCode = "P";
+
         public LeagueBusinessLayer()
         {
             _dataLayer = new LeagueDataLayer();
@@ -30,6 +34,7 @@ namespace BusinessLayer
         public void SetLeagueId(int leagueId)
         {
             _dataLayer.LeagueId = leagueId;
+            _dataLayer.RefreshData();
         }
 
         public Team GetTeam(int teamId)
@@ -50,6 +55,16 @@ namespace BusinessLayer
         public List<Standings> GetLeagueStandings()
         {
             return null;
+        }
+
+        public List<string> GetSkaterStatColumnHeaders()
+        {
+            return _dataLayer.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
+        }
+
+        public List<string> GetGaolieStatColumnHeaders()
+        {
+            return _dataLayer.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
         }
 
         public List<Matchup> GetWeeklyMatchups()

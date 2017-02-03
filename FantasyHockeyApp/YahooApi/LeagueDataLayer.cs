@@ -66,6 +66,11 @@ namespace YahooApi
 
         public Team GetTeam(int teamId) => _league.Teams.First(team => team.TeamId == teamId);
 
+        public List<StatCategory> GetStatCategories()
+        {
+            return _league.StatCategories;
+        }
+
         public List<Matchup> GetWeeklyMatchups() => _league.Matchups;
     }
 }
