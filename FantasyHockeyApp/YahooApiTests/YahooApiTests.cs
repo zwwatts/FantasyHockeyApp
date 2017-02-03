@@ -131,6 +131,50 @@ namespace YahooApiTests
         }
 
         [TestMethod]
+        public void Yahoo_GetTeam_TeamIsCorrect()
+        {
+            var team = _yahoo.GetTeam(22381, 1);
+            Assert.AreEqual("Rubber Puckies", team.Name);
+        }
+
+        [TestMethod]
+        public void Yahoo_GetTeams_TeamsAreCorrect()
+        {
+            
+        }
+
+        [TestMethod]
+        public void Yahoo_GetStandings_StandingsAreCorrect()
+        {
+            var standings = _yahoo.GetStandings(22381, 1);
+            Assert.IsTrue(10 <= standings.Wins);
+        }
+
+        [TestMethod]
+        public void Yahoo_GetStatCategories_CategoriesAreCorrect()
+        {
+            var statCategories = _yahoo.GetStatCategories(22381);
+            Assert.AreEqual(14, statCategories.Count);
+            Assert.IsTrue(statCategories.First(category => category.DisplayName == "G").StatCategoryId == 1);
+        }
+
+        [TestMethod]
+        public void Yahoo_GetPlayers_PlayersAreCorrect()
+        {
+            var players = _yahoo.GetPlayers(22381, 1);
+            Assert.IsTrue(players.Count >= 16);
+            var matthews = players.First(player => player.PlayerId == 7109);
+            Assert.AreEqual("Auston", matthews.FirstName);
+            Assert.AreEqual("Matthews", matthews.LastName);
+            Assert.AreEqual(7109, matthews.PlayerId);
+            Assert.AreEqual("P", matthews.PositionType);
+            Assert.AreEqual("C", matthews.Position);
+            Assert.AreEqual("Toronto Maple Leafs", matthews.EditorialTeamName);
+            Assert.AreEqual(34, matthews.UniformNumber);
+            Assert.IsTrue(matthews.Stats.First(stat => stat.StatCategoryId == 1).Quantity >= 23);
+        }
+
+        [TestMethod]
         public void Yahoo_GetMatchups_MatchupsAreCorrect()
         {
             var matchups = _yahoo.GetMatchups(22381);
@@ -139,37 +183,6 @@ namespace YahooApiTests
             var matchup = matchups.First();
             Assert.AreEqual(2, matchup.Teams.Count);
             Assert.AreEqual(2, matchup.CurrentScore.Count);
-        }
-
-        [TestMethod]
-        public void Yahoo_GetStandings_StandingsAreCorrect()
-        {
-            var standings = _yahoo.GetStandings(22381, 1);
-            Assert.AreEqual(10, standings.Wins);
-        }
-
-        [TestMethod]
-        public void Yahoo_GetPlayers_PlayersAreCorrect()
-        {
-            var players = _yahoo.GetPlayers(22381, 1);
-            Debug.WriteLine(players.Count);
-            foreach (var player in players)
-            {
-                Debug.WriteLine($"{player.LastName} : {player.Stats[0].Quantity}");
-            }
-            foreach (var stat in players[0].Stats)
-            {
-                Debug.WriteLine(stat.Quantity);
-            }
-            Assert.IsTrue(players.Count >= 16);
-            
-        }
-
-        [TestMethod]
-        public void Yahoo_GetTeam_TeamIsCorrect()
-        {
-            var team = _yahoo.GetTeam(22381, 1);
-            Assert.AreEqual("Rubber Puckies", team.Name);
         }
     }
 }

@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml;
-using System.Xml.Linq;
 using Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace YahooApi
 {
@@ -36,6 +31,7 @@ namespace YahooApi
         public Team GetTeam(int leagueId, int teamId)
         {
             var teamQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}");
+            if (teamQueryResults == null) return null;
             var team = XmlToXmlDocument(teamQueryResults);
             var allPlayers = GetPlayers(leagueId, teamId);
 
@@ -53,6 +49,7 @@ namespace YahooApi
         public List<Team> GetTeams(int leagueId)
         {
             var standingsQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/standings");
+            if (standingsQueryResults == null) return null;
             var teams = XmlToXmlDocument(standingsQueryResults).SelectNodes("//fantasy_content/league/standings/teams/team");
             var playersDictionary = teams?.Cast<XmlNode>().ToDictionary(
                 team => Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml), 
@@ -87,6 +84,7 @@ namespace YahooApi
         public Standings GetStandings(int leagueId, int teamId)
         {
             var standingsQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/standings");
+            if (standingsQueryResults == null) return null;
             var teams = XmlToXmlDocument(standingsQueryResults).SelectNodes("//fantasy_content/league/standings/teams/team");
             return (from team in teams?.Cast<XmlNode>()
                     where team.SelectSingleNode("team_id")?.InnerXml == teamId.ToString()
@@ -104,6 +102,7 @@ namespace YahooApi
         public List<StatCategory> GetStatCategories(int leagueId)
         {
             var settingsQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/settings");
+            if (settingsQueryResults == null) return null;
             var settings = XmlToXmlDocument(settingsQueryResults);
             var stats = settings.SelectNodes("//fantasy_content/league/settings/stat_categories/stats/stat");
             var modifiers = settings.SelectNodes("//fantasy_content/league/settings/stat_modifiers/stats/stat");
@@ -124,6 +123,7 @@ namespace YahooApi
         public List<Player> GetPlayers(int leagueId, int teamId)
         {
             var teamRosterQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}/players/stats");
+            if (teamRosterQueryResults == null) return null;
             var players = XmlToXmlDocument(teamRosterQueryResults).SelectNodes("//fantasy_content/team/players/player");
 
             return players?.Cast<XmlNode>().Select(player => new Player
@@ -149,6 +149,7 @@ namespace YahooApi
         public List<Matchup> GetMatchups(int leagueId)
         {
             var scoreboardQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/scoreboard");
+            if (scoreboardQueryResults == null) return null;
             var matchups = XmlToXmlDocument(scoreboardQueryResults).SelectNodes("//fantasy_content/league/scoreboard/matchups/matchup");
 
             return matchups?.Cast<XmlNode>().Select(matchup => new Matchup

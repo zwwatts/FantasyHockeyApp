@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -66,7 +67,8 @@ namespace YahooApi
                 catch (Exception e)
                 {
                     // Likely no internet connection
-                    result = string.Empty;
+                    Debug.WriteLine(e.Message);
+                    return null;
                 }
             }
 
