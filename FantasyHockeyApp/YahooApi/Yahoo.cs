@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using Models;
@@ -13,19 +14,27 @@ namespace YahooApi
 
         public League GetLeague(int leagueId)
         {
-            var leagueQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}");
-            if (leagueQueryResults == null) return null;
-            var league = XmlToXmlDocument(leagueQueryResults).SelectSingleNode("//fantasy_content/league");
-
-            return new League
+            try
             {
-                LeagueId = leagueId,
-                LeagueKey = league?.SelectSingleNode("//league_key")?.InnerXml,
-                Name = league?.SelectSingleNode("//name")?.InnerXml,
-                Teams = GetTeams(leagueId),
-                StatCategories = GetStatCategories(leagueId),
-                Matchups = GetMatchups(leagueId)
-            };
+                var leagueQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}");
+                if (leagueQueryResults == null) return null;
+                var league = XmlToXmlDocument(leagueQueryResults).SelectSingleNode("//fantasy_content/league");
+
+                return new League
+                       {
+                           LeagueId = leagueId,
+                           LeagueKey = league?.SelectSingleNode("//league_key")?.InnerXml,
+                           Name = league?.SelectSingleNode("//name")?.InnerXml,
+                           Teams = GetTeams(leagueId),
+                           StatCategories = GetStatCategories(leagueId),
+                           Matchups = GetMatchups(leagueId)
+                       };
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
         }
 
         public Team GetTeam(int leagueId, int teamId)

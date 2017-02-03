@@ -14,10 +14,10 @@ namespace YahooApiTests
         public void Initialize() => _yahoo = new Yahoo();
 
         [TestMethod]
-        public void TestingLeagueJson()
-        {
-            var league = _yahoo.GetLeague(22381);
-        }
+        public void Yahoo_GetLeagueWithInvalidStats_ReturnsNull() => Assert.IsNull(_yahoo.GetLeague(22386));
+
+        [TestMethod]
+        public void Yahoo_GetLeagueWithoutAccess_ReturnsNull() => Assert.IsNull(_yahoo.GetLeague(22392));
 
         [TestMethod]
         public void TestMethod1()
