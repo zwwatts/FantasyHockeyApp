@@ -74,9 +74,9 @@ namespace Forms
             }
 
             //Goalies
-            columnNames = _businessLayer.GetGaolieStatColumnHeaders();
+            columnNames = _businessLayer.GetGoalieStatColumnHeaders();
             
-            goalieDataGridView.ColumnCount = 6;
+            goalieDataGridView.ColumnCount = 5 + columnNames.Count;
             goalieDataGridView.Columns[0].Name = "First Name";
             goalieDataGridView.Columns[1].Name = "Last Name";
             goalieDataGridView.Columns[2].Name = "NHL Team";
@@ -86,7 +86,7 @@ namespace Forms
             i = 5;
             foreach (var colName in columnNames)
             {
-                SkaterDataGridView.Columns[i].Name = colName;
+                goalieDataGridView.Columns[i].Name = colName;
                 i++;
             }
         }
