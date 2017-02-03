@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using YahooApi;
 
 namespace YahooApiTests
@@ -18,7 +17,6 @@ namespace YahooApiTests
         public void TestingLeagueJson()
         {
             var league = _yahoo.GetLeague(22381);
-            Debug.WriteLine(JsonConvert.SerializeObject(league));
         }
 
         [TestMethod]
@@ -153,8 +151,14 @@ namespace YahooApiTests
         [TestMethod]
         public void Yahoo_GetPlayers_PlayersAreCorrect()
         {
-            var players = _yahoo.GetPlayers(22381, 1);
+            var players = _yahoo.GetPlayers(21165, 1);
+            Debug.WriteLine(players.Count);
+            foreach (var player in players)
+            {
+                Debug.WriteLine($"{player.LastName} : {player.Stats[0].Quantity}");
+            }
             Assert.IsTrue(players.Count >= 16);
+            
         }
 
         [TestMethod]

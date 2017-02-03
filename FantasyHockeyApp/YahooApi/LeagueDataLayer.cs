@@ -35,6 +35,7 @@ namespace YahooApi
         private void FireUpdateEvent()
         {
             var handlers = LeagueDataUpdated;
+            if (handlers == null) return;
             foreach (var handler in handlers.GetInvocationList())
             {
                 try

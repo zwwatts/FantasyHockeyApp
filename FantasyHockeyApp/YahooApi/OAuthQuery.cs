@@ -59,7 +59,15 @@ namespace YahooApi
 
             using (var httpClient = new WebClient())
             {
-                result = httpClient.DownloadString(uri.AbsoluteUri);
+                try
+                {
+                    result = httpClient.DownloadString(uri.AbsoluteUri);
+                }
+                catch (Exception e)
+                {
+                    // Likely no internet connection
+                    result = string.Empty;
+                }
             }
 
             return result;
