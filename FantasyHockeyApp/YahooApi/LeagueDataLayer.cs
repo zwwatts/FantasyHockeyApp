@@ -8,14 +8,12 @@ namespace YahooApi
     public class LeagueDataLayer
     {
         private readonly Yahoo _yahooApiClient = new Yahoo();
-        private readonly int _leagueId;
+        public  int LeagueId { get; set; }
         private League _league;
-        public int RefreshInterval { get; } = 15;
+        public int RefreshInterval { get; } = 1;
 
-        public LeagueDataLayer(int leagueId)
+        public LeagueDataLayer()
         {
-            _leagueId = leagueId;
-
             RefreshData();
             // from http://stackoverflow.com/questions/13019433/calling-method-on-every-x-minutes
             var timer = new System.Threading.Timer((e) =>
@@ -28,13 +26,15 @@ namespace YahooApi
 
         public void RefreshData()
         {
-            _league = _yahooApiClient.GetLeague(_leagueId);
+            if (LeagueId <= 0) return;
+            _league = _yahooApiClient.GetLeague(LeagueId);
             FireUpdateEvent();
         }
 
         private void FireUpdateEvent()
         {
             var handlers = LeagueDataUpdated;
+            if(handlers == null) return;
             foreach (var handler in handlers.GetInvocationList())
             {
                 try
@@ -42,10 +42,9 @@ namespace YahooApi
                     var action = (Action) handler;
                     action();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    
-                    throw;
+                    Console.WriteLine(e.StackTrace);
                 }
             }
         }

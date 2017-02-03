@@ -8,9 +8,10 @@ namespace BusinessLayer
     public class LeagueBusinessLayer
     {
         private readonly LeagueDataLayer _dataLayer;
-        public LeagueBusinessLayer(int leagueId)
+        public LeagueBusinessLayer()
         {
-            _dataLayer = new LeagueDataLayer(leagueId);
+            _dataLayer = new LeagueDataLayer();
+            _dataLayer.LeagueDataUpdated += FireUpdateEvent;
         }
 
         public event Action LeagueDataUpdated;
@@ -18,6 +19,11 @@ namespace BusinessLayer
         public List<Team> GetTeams()
         {
             return _dataLayer.GetTeams();
+        }
+
+        public void SetLeagueId(int leagueId)
+        {
+            _dataLayer.LeagueId = leagueId;
         }
 
         public Team GetTeam(int teamId)
@@ -43,6 +49,24 @@ namespace BusinessLayer
         public List<Matchup> GetWeeklyMatchups()
         {
             return _dataLayer.GetWeeklyMatchups();
+        }
+
+        private void FireUpdateEvent()
+        {
+            var handlers = LeagueDataUpdated;
+            if (handlers == null) return;
+            foreach (var handler in handlers.GetInvocationList())
+            {
+                try
+                {
+                    var action = (Action)handler;
+                    action();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
+            }
         }
     }
 }
