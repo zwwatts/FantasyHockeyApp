@@ -96,7 +96,7 @@ namespace Forms
         {
             standingsDataGridView.Rows.Clear();
             var teamsList = _businessLayer.GetTeams();
-            if (teams == null) return;
+            if (teamsList == null) return;
             foreach (var team in teamsList)
             {
                 object[] row = {
@@ -118,6 +118,7 @@ namespace Forms
         {
             matchupDataGridView.Rows.Clear();
             var matchupList = _businessLayer.GetWeeklyMatchups();
+            if (matchupList == null) return;
             foreach (var matchup in matchupList)
             {
                 object[] row = {
@@ -136,6 +137,7 @@ namespace Forms
         {
             SkaterDataGridView.Rows.Clear();
             var skaters = _businessLayer.GetTeam(team).Skaters;
+            if(skaters == null) return;
             foreach (var player in skaters)
             {
                 var dataRow = new List<string>
@@ -156,6 +158,7 @@ namespace Forms
         {
             goalieDataGridView.Rows.Clear();
             var goalies = _businessLayer.GetTeam(team).Goalies;
+            if (goalies == null) return;
             foreach (var player in goalies)
             {
                 var dataRow = new List<string>
