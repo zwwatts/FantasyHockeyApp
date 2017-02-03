@@ -1,0 +1,25 @@
+User Manual
+
+Our program, the Yahoo Fantasy Hockey App, is used
+to see statistics about a specific fantasy hockey
+league. The league ID must be known for the app to
+have any value to the user. The two league IDs 
+we use for testing/running the app are 22381, and
+21165. These IDs can be entered into the league ID
+box in the upper left hand corner to display that
+leagues statistics. Upon entering, the program will
+call the API and load the Fantasy league into the
+UI. For all of the UI except the teams tab, the
+data displayed is league independent. In the teams
+tab the players and goalies can have different
+statistics depending on how the league is set up,
+and as such this can change between leagues. An
+example of ths is the 22381 league, which has many
+more stats displayed for skaters than the other.
+
+Sources (Also referenced in comments in code):
+http://stackoverflow.com/questions/13019433/calling-method-on-every-x-minutes
+http://oauth.googlecode.com/svn/code/csharp/
+https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx
+https://msdn.microsoft.com/en-us/library/ms171728(v=vs.110).aspx
+http://stackoverflow.com/questions/6184/how-do-i-make-event-callbacks-into-my-win-forms-thread-safe

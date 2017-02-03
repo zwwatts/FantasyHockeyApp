@@ -14,10 +14,10 @@ namespace YahooApiTests
         public void Initialize() => _yahoo = new Yahoo();
 
         [TestMethod]
-        public void TestingLeagueJson()
-        {
-            var league = _yahoo.GetLeague(22381);
-        }
+        public void Yahoo_GetLeagueWithInvalidStats_ReturnsNull() => Assert.IsNull(_yahoo.GetLeague(22386));
+
+        [TestMethod]
+        public void Yahoo_GetLeagueWithoutAccess_ReturnsNull() => Assert.IsNull(_yahoo.GetLeague(22392));
 
         [TestMethod]
         public void TestMethod1()
@@ -172,6 +172,15 @@ namespace YahooApiTests
             Assert.AreEqual("Toronto Maple Leafs", matthews.EditorialTeamName);
             Assert.AreEqual(34, matthews.UniformNumber);
             Assert.IsTrue(matthews.Stats.First(stat => stat.StatCategoryId == 1).Quantity >= 23);
+        }
+
+        [TestMethod]
+        public void Yahoo_GetPlayersWithInvalidStats_StatsAreZero()
+        {
+            var players = _yahoo.GetPlayers(21165, 5);
+            var matthews = players.First(player => player.PlayerId == 2680);
+            Assert.AreEqual("Datsyuk", matthews.LastName);
+            Assert.IsTrue(matthews.Stats.First(stat => stat.StatCategoryId == 1).Quantity >= 0);
         }
 
         [TestMethod]
