@@ -12,12 +12,6 @@ namespace BusinessLayer
         private const string GoalieCode = "G";
         private const string SkaterCode = "P";
 
-        public LeagueBusinessLayer()
-        {
-            _dataLayer = new LeagueDataLayer();
-            _dataLayer.LeagueDataUpdated += FireUpdateEvent;
-        }
-
         public LeagueBusinessLayer(int leagueId)
         {
             _dataLayer = new LeagueDataLayer() {LeagueId = leagueId};
@@ -28,48 +22,39 @@ namespace BusinessLayer
 
         public List<Team> GetTeams()
         {
-            return _dataLayer.GetTeams();
+            return _dataLayer?.GetTeams();
         }
 
         public void SetLeagueId(int leagueId)
         {
+            if(leagueId == _dataLayer.LeagueId) return;
             _dataLayer.LeagueId = leagueId;
-            _dataLayer.RefreshData();
+            _dataLayer?.ResetInterval();
         }
 
         public Team GetTeam(int teamId)
         {
-            return _dataLayer.GetTeam(teamId);
-        }
-
-        public List<Player> GetPlayers()
-        {
-            return null;
+            return _dataLayer?.GetTeam(teamId);
         }
 
         public LeagueInfo GetLeagueInfo()
         {
-            return _dataLayer.GetLeagueInfo();
-        }
-
-        public List<Standings> GetLeagueStandings()
-        {
-            return null;
+            return _dataLayer?.GetLeagueInfo();
         }
 
         public List<string> GetSkaterStatColumnHeaders()
         {
-            return _dataLayer.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
+            return _dataLayer?.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
         }
 
         public List<string> GetGaolieStatColumnHeaders()
         {
-            return _dataLayer.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
+            return _dataLayer?.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
         }
 
         public List<Matchup> GetWeeklyMatchups()
         {
-            return _dataLayer.GetWeeklyMatchups();
+            return _dataLayer?.GetWeeklyMatchups();
         }
 
         private void FireUpdateEvent()
