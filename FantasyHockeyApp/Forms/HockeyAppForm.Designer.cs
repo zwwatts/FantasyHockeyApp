@@ -43,10 +43,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.teamComboBox = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.leagueName = new System.Windows.Forms.Label();
-            this.leagueIDSubmit = new System.Windows.Forms.Button();
-            this.leagueIDLabel = new System.Windows.Forms.Label();
             this.leagueIDNumeric = new System.Windows.Forms.NumericUpDown();
+            this.leagueIDLabel = new System.Windows.Forms.Label();
+            this.leagueIDSubmit = new System.Windows.Forms.Button();
+            this.leagueName = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.standings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.standingsDataGridView)).BeginInit();
@@ -127,7 +127,7 @@
             this.matchups.Margin = new System.Windows.Forms.Padding(4);
             this.matchups.Name = "matchups";
             this.matchups.Padding = new System.Windows.Forms.Padding(4);
-            this.matchups.Size = new System.Drawing.Size(974, 382);
+            this.matchups.Size = new System.Drawing.Size(974, 373);
             this.matchups.TabIndex = 1;
             this.matchups.Text = "Matchups";
             this.matchups.UseVisualStyleBackColor = true;
@@ -148,7 +148,7 @@
             this.matchupDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.matchupDataGridView.RowHeadersVisible = false;
             this.matchupDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.matchupDataGridView.Size = new System.Drawing.Size(966, 374);
+            this.matchupDataGridView.Size = new System.Drawing.Size(966, 365);
             this.matchupDataGridView.TabIndex = 0;
             // 
             // teams
@@ -160,7 +160,7 @@
             this.teams.Margin = new System.Windows.Forms.Padding(4);
             this.teams.Name = "teams";
             this.teams.Padding = new System.Windows.Forms.Padding(4);
-            this.teams.Size = new System.Drawing.Size(974, 382);
+            this.teams.Size = new System.Drawing.Size(974, 373);
             this.teams.TabIndex = 2;
             this.teams.Text = "Teams";
             this.teams.UseVisualStyleBackColor = true;
@@ -280,37 +280,6 @@
             this.panel1.Size = new System.Drawing.Size(982, 53);
             this.panel1.TabIndex = 2;
             // 
-            // leagueName
-            // 
-            this.leagueName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.leagueName.AutoSize = true;
-            this.leagueName.Location = new System.Drawing.Point(786, 19);
-            this.leagueName.Name = "leagueName";
-            this.leagueName.Size = new System.Drawing.Size(192, 17);
-            this.leagueName.TabIndex = 1;
-            this.leagueName.Text = "<League Name Placeholder>";
-            // 
-            // leagueIDSubmit
-            // 
-            this.leagueIDSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.leagueIDSubmit.Location = new System.Drawing.Point(107, 26);
-            this.leagueIDSubmit.Name = "leagueIDSubmit";
-            this.leagueIDSubmit.Size = new System.Drawing.Size(66, 23);
-            this.leagueIDSubmit.TabIndex = 2;
-            this.leagueIDSubmit.Text = "Submit";
-            this.leagueIDSubmit.UseVisualStyleBackColor = true;
-            this.leagueIDSubmit.Click += new System.EventHandler(this.leagueIDSubmit_Click);
-            // 
-            // leagueIDLabel
-            // 
-            this.leagueIDLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.leagueIDLabel.AutoSize = true;
-            this.leagueIDLabel.Location = new System.Drawing.Point(3, 7);
-            this.leagueIDLabel.Name = "leagueIDLabel";
-            this.leagueIDLabel.Size = new System.Drawing.Size(73, 17);
-            this.leagueIDLabel.TabIndex = 4;
-            this.leagueIDLabel.Text = "League ID";
-            // 
             // leagueIDNumeric
             // 
             this.leagueIDNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -329,6 +298,37 @@
             0,
             0});
             // 
+            // leagueIDLabel
+            // 
+            this.leagueIDLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.leagueIDLabel.AutoSize = true;
+            this.leagueIDLabel.Location = new System.Drawing.Point(3, 7);
+            this.leagueIDLabel.Name = "leagueIDLabel";
+            this.leagueIDLabel.Size = new System.Drawing.Size(73, 17);
+            this.leagueIDLabel.TabIndex = 4;
+            this.leagueIDLabel.Text = "League ID";
+            // 
+            // leagueIDSubmit
+            // 
+            this.leagueIDSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.leagueIDSubmit.Location = new System.Drawing.Point(107, 26);
+            this.leagueIDSubmit.Name = "leagueIDSubmit";
+            this.leagueIDSubmit.Size = new System.Drawing.Size(66, 23);
+            this.leagueIDSubmit.TabIndex = 2;
+            this.leagueIDSubmit.Text = "Submit";
+            this.leagueIDSubmit.UseVisualStyleBackColor = true;
+            this.leagueIDSubmit.Click += new System.EventHandler(this.leagueIDSubmit_Click);
+            // 
+            // leagueName
+            // 
+            this.leagueName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.leagueName.AutoSize = true;
+            this.leagueName.Location = new System.Drawing.Point(786, 19);
+            this.leagueName.Name = "leagueName";
+            this.leagueName.Size = new System.Drawing.Size(192, 17);
+            this.leagueName.TabIndex = 1;
+            this.leagueName.Text = "<League Name Placeholder>";
+            // 
             // HockeyAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -338,7 +338,7 @@
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "HockeyAppForm";
-            this.Text = "Form1";
+            this.Text = "Yahoo Fantasy Hockey App";
             this.tabControl1.ResumeLayout(false);
             this.standings.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.standingsDataGridView)).EndInit();
