@@ -12,7 +12,7 @@ namespace YahooApi
         private readonly Yahoo _yahooApiClient = new Yahoo();
         public  int LeagueId { get; set; }
         private League _league;
-        private Timer _timer;
+        private readonly Timer _timer;
         public int RefreshInterval { get; } = 1;
 
         public LeagueDataLayer()
@@ -26,10 +26,7 @@ namespace YahooApi
 
         public event Action LeagueDataUpdated;
 
-        public void ResetInterval()
-        {
-            _timer.Change(0, (int)TimeSpan.FromMinutes(RefreshInterval).TotalMilliseconds);
-        }
+        public void ResetInterval() => _timer.Change(0, (int)TimeSpan.FromMinutes(RefreshInterval).TotalMilliseconds);
 
         private void RefreshData()
         {
@@ -57,26 +54,17 @@ namespace YahooApi
             }
         }
 
-        public LeagueInfo GetLeagueInfo()
-        {
-            return new LeagueInfo
-                {
-                    LeagueName = _league?.Name
-                };
-        }
+        public LeagueInfo GetLeagueInfo() => new LeagueInfo
+                                             {
+                                                 LeagueName = _league?.Name
+                                             };
 
-        public List<Team> GetTeams()
-        {
-            return _league?.Teams;
-        }
+        public List<Team> GetTeams() => _league?.Teams;
 
-        public Team GetTeam(int teamId) => _league.Teams.First(team => team.TeamId == teamId);
+        public Team GetTeam(int teamId) => _league?.Teams.FirstOrDefault(team => team.TeamId == teamId);
 
-        public List<StatCategory> GetStatCategories()
-        {
-            return _league.StatCategories;
-        }
+        public List<StatCategory> GetStatCategories() => _league?.StatCategories;
 
-        public List<Matchup> GetWeeklyMatchups() => _league.Matchups;
+        public List<Matchup> GetWeeklyMatchups() => _league?.Matchups;
     }
 }

@@ -20,10 +20,7 @@ namespace BusinessLayer
 
         public event Action<int> LeagueDataUpdated;
 
-        public List<Team> GetTeams()
-        {
-            return _dataLayer?.GetTeams();
-        }
+        public List<Team> GetTeams() => _dataLayer?.GetTeams();
 
         public void SetLeagueId(int leagueId)
         {
@@ -32,30 +29,15 @@ namespace BusinessLayer
             _dataLayer?.ResetInterval();
         }
 
-        public Team GetTeam(int teamId)
-        {
-            return _dataLayer?.GetTeam(teamId);
-        }
+        public Team GetTeam(int teamId) => _dataLayer?.GetTeam(teamId);
 
-        public LeagueInfo GetLeagueInfo()
-        {
-            return _dataLayer?.GetLeagueInfo();
-        }
+        public LeagueInfo GetLeagueInfo() => _dataLayer?.GetLeagueInfo();
 
-        public List<string> GetSkaterStatColumnHeaders()
-        {
-            return _dataLayer?.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
-        }
+        public List<string> GetSkaterStatColumnHeaders() => _dataLayer?.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
 
-        public List<string> GetGoalieStatColumnHeaders()
-        {
-            return _dataLayer?.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
-        }
+        public List<string> GetGoalieStatColumnHeaders() => _dataLayer?.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
 
-        public List<Matchup> GetWeeklyMatchups()
-        {
-            return _dataLayer?.GetWeeklyMatchups();
-        }
+        public List<Matchup> GetWeeklyMatchups() => _dataLayer?.GetWeeklyMatchups();
 
         private void FireUpdateEvent()
         {

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YahooApi", "YahooApi\YahooA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YahooApiTests", "YahooApiTests\YahooApiTests.csproj", "{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayerTests", "BusinessLayerTests\BusinessLayerTests.csproj", "{559E5179-2080-49CE-A47E-9086F64AEA9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62CA523D-0B5A-4C18-8775-A34FFCCF33FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{559E5179-2080-49CE-A47E-9086F64AEA9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{559E5179-2080-49CE-A47E-9086F64AEA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{559E5179-2080-49CE-A47E-9086F64AEA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{559E5179-2080-49CE-A47E-9086F64AEA9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
