@@ -15,19 +15,18 @@ namespace YahooApi
     {
         private readonly OAuthQuery _oauthQuery = new OAuthQuery();
         private const string YahooFantasyUrl = @"http://fantasysports.yahooapis.com/fantasy/v2";
-        private const string _namespace = @"http://fantasysports.yahooapis.com/fantasy/v2/base.rng";
 
         public League GetLeague(int leagueId)
         {
             var leagueQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}");
-            var jsonResponse = XmlToJObject(leagueQueryResults);
-            var leagueJson = jsonResponse["fantasy_content"]["league"];
+            if (leagueQueryResults == null) return null;
+            var league = XmlToXmlDocument(leagueQueryResults).SelectSingleNode("//fantasy_content/league");
 
             return new League
             {
                 LeagueId = leagueId,
-                LeagueKey = leagueJson["league_key"].ToString(),
-                Name = leagueJson["name"].ToString(),
+                LeagueKey = league?.SelectSingleNode("//league_key")?.InnerXml,
+                Name = league?.SelectSingleNode("//name")?.InnerXml,
                 Teams = GetTeams(leagueId),
                 StatCategories = GetStatCategories(leagueId),
                 Matchups = GetMatchups(leagueId)
@@ -37,19 +36,14 @@ namespace YahooApi
         public Team GetTeam(int leagueId, int teamId)
         {
             var teamQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}");
-            var jsonResponse = XmlToJObject(teamQueryResults);
-            var teamJson = jsonResponse["fantasy_content"]["team"];
             var team = XmlToXmlDocument(teamQueryResults);
-            var nsmgr = new XmlNamespaceManager(team.NameTable);
-            nsmgr.AddNamespace("IKS", _namespace);
-            Debug.WriteLine(team.SelectSingleNode("//IKS:fantasy_content/IKS:team/IKS:name", nsmgr).InnerXml);
             var allPlayers = GetPlayers(leagueId, teamId);
 
             return new Team
             {
-                Name = teamJson["name"].ToString(),
+                Name = team.SelectSingleNode("//fantasy_content/team/name")?.InnerXml,
                 TeamId = teamId,
-                TeamKey = teamJson["team_key"].ToString(),
+                TeamKey = team.SelectSingleNode("//fantasy_content/team/team_key")?.InnerXml,
                 Standings = GetStandings(leagueId, teamId),
                 Skaters = allPlayers.Where(player => player.PositionType == "P").ToList(),
                 Goalies = allPlayers.Where(player => player.PositionType == "G").ToList()
@@ -59,29 +53,33 @@ namespace YahooApi
         public List<Team> GetTeams(int leagueId)
         {
             var standingsQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/standings");
-            var jsonResponse = XmlToJObject(standingsQueryResults);
-            var teamsJson = jsonResponse["fantasy_content"]["league"]["standings"]["teams"]["team"];
-            var playersDictionary = teamsJson.ToDictionary(team => (int)team["team_id"], team => GetPlayers(leagueId, (int)team["team_id"]));
-            return teamsJson.Select(team => new Team
+            var teams = XmlToXmlDocument(standingsQueryResults).SelectNodes("//fantasy_content/league/standings/teams/team");
+            var playersDictionary = teams?.Cast<XmlNode>().ToDictionary(
+                team => Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml), 
+                team => GetPlayers(leagueId, Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml)));
+
+            return teams?.Cast<XmlNode>().Select(team => new Team
             {
-                Name = team["name"].ToString(),
-                TeamId = (int)team["team_id"],
-                TeamKey = team["team_key"].ToString(),
+                Name = team.SelectSingleNode("name")?.InnerXml,
+                TeamId = Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml),
+                TeamKey = team.SelectSingleNode("team_key")?.InnerXml,
                 Standings = new Standings
                 {
-                    Wins = (int)team["team_standings"]["outcome_totals"]["wins"],
-                    Losses = (int)team["team_standings"]["outcome_totals"]["losses"],
-                    Ties = (int)team["team_standings"]["outcome_totals"]["ties"],
-                    Rank = (int)team["team_standings"]["rank"],
-                    PointsFor = (double)team["team_standings"]["points_for"],
-                    PointsAgainst = (double)team["team_standings"]["points_against"]
+                    Wins = Convert.ToInt32(team.SelectSingleNode("team_standings/outcome_totals/wins")?.InnerXml),
+                    Losses = Convert.ToInt32(team.SelectSingleNode("team_standings/outcome_totals/losses")?.InnerXml),
+                    Ties = Convert.ToInt32(team.SelectSingleNode("team_standings/outcome_totals/ties")?.InnerXml),
+                    Rank = Convert.ToInt32(team.SelectSingleNode("team_standings/rank")?.InnerXml),
+                    PointsFor = Convert.ToDouble(team.SelectSingleNode("team_standings/points_for")?.InnerXml),
+                    PointsAgainst = Convert.ToDouble(team.SelectSingleNode("team_standings/points_against")?.InnerXml)
                 },
-                Skaters = playersDictionary[(int)team["team_id"]].Where(player => player.PositionType == "P").ToList(),
-                Goalies = playersDictionary[(int)team["team_id"]].Where(player => player.PositionType == "G").ToList(),
-                TotalStats = team["team_stats"]["stats"]["stat"].Select(stat => new Stat
+                Skaters = playersDictionary[Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml)]
+                    .Where(player => player.PositionType == "P").ToList(),
+                Goalies = playersDictionary[Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml)]
+                    .Where(player => player.PositionType == "G").ToList(),
+                TotalStats = team.SelectNodes("team_stats/stats/stat")?.Cast<XmlNode>().Select(stat => new Stat
                 {
-                    Quantity = (int)stat["value"],
-                    StatCategoryId = (int)stat["stat_id"]
+                    Quantity = Convert.ToInt32(stat.SelectSingleNode("value")?.InnerXml),
+                    StatCategoryId = Convert.ToInt32(stat.SelectSingleNode("stat_id")?.InnerXml)
                 }).ToList()
             }).ToList();
         }
@@ -89,66 +87,61 @@ namespace YahooApi
         public Standings GetStandings(int leagueId, int teamId)
         {
             var standingsQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/standings");
-            //var xdoc = XDocument.Parse(standingsQueryResults);
-            //XNamespace ns = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng";
-            //var teams = xdoc.Descendants(ns + "team");
-            var jsonResponse = XmlToJObject(standingsQueryResults);
-            var teams = jsonResponse["fantasy_content"]["league"]["standings"]["teams"]["team"];
-            return (from team in teams
-                        //where team.Attribute("team_id")?.Value == teamId.ToString()
-                    where team["team_id"].ToString() == teamId.ToString()
+            var teams = XmlToXmlDocument(standingsQueryResults).SelectNodes("//fantasy_content/league/standings/teams/team");
+            return (from team in teams?.Cast<XmlNode>()
+                    where team.SelectSingleNode("team_id")?.InnerXml == teamId.ToString()
                     select new Standings
                     {
-                        Wins = (int)team["team_standings"]["outcome_totals"]["wins"],
-                        //Wins = Convert.ToInt32(team.Descendants(ns + "outcome_totals").First().Element(ns + "wins")?.Value),
-                        Losses = (int)team["team_standings"]["outcome_totals"]["losses"],
-                        Ties = (int)team["team_standings"]["outcome_totals"]["ties"],
-                        Rank = (int)team["team_standings"]["rank"],
-                        PointsFor = (double)team["team_standings"]["points_for"],
-                        PointsAgainst = (double)team["team_standings"]["points_against"]
+                        Wins = Convert.ToInt32(team.SelectSingleNode("team_standings/outcome_totals/wins")?.InnerXml),
+                        Losses = Convert.ToInt32(team.SelectSingleNode("team_standings/outcome_totals/losses")?.InnerXml),
+                        Ties = Convert.ToInt32(team.SelectSingleNode("team_standings/outcome_totals/ties")?.InnerXml),
+                        Rank = Convert.ToInt32(team.SelectSingleNode("team_standings/rank")?.InnerXml),
+                        PointsFor = Convert.ToDouble(team.SelectSingleNode("team_standings/points_for")?.InnerXml),
+                        PointsAgainst = Convert.ToDouble(team.SelectSingleNode("team_standings/points_against")?.InnerXml)
                     }).FirstOrDefault();
         }
 
         public List<StatCategory> GetStatCategories(int leagueId)
         {
             var settingsQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/settings");
+            var settings = XmlToXmlDocument(settingsQueryResults);
+            var stats = settings.SelectNodes("//fantasy_content/league/settings/stat_categories/stats/stat");
+            var modifiers = settings.SelectNodes("//fantasy_content/league/settings/stat_modifiers/stats/stat");
+            var modifierDictionary = modifiers?.Cast<XmlNode>().ToDictionary(
+                modifier => Convert.ToInt32(modifier.SelectSingleNode("stat_id")?.InnerXml), 
+                modifier => Convert.ToDouble(modifier.SelectSingleNode("value")?.InnerXml));
 
-            var jsonResponse = XmlToJObject(settingsQueryResults);
-            var stats = jsonResponse["fantasy_content"]["league"]["settings"]["stat_categories"]["stats"]["stat"];
-            var modifiers = jsonResponse["fantasy_content"]["league"]["settings"]["stat_modifiers"]["stats"]["stat"];
-            var modifierDictionary = modifiers.ToDictionary(modifier => (int)modifier["stat_id"], modifier => (double)modifier["value"]);
-
-            return stats.Select(stat => new StatCategory
+            return stats?.Cast<XmlNode>().Select(stat => new StatCategory
             {
-                Name = stat["name"].ToString(),
-                DisplayName = stat["display_name"].ToString(),
-                StatCategoryId = (int)stat["stat_id"],
-                PositionType = stat["position_type"].ToString(),
-                ModifierValue = modifierDictionary[(int)stat["stat_id"]]
+                Name = stat.SelectSingleNode("name")?.InnerXml,
+                DisplayName = stat.SelectSingleNode("display_name")?.InnerXml,
+                StatCategoryId = Convert.ToInt32(stat.SelectSingleNode("stat_id")?.InnerXml),
+                PositionType = stat.SelectSingleNode("position_type")?.InnerXml,
+                ModifierValue = modifierDictionary[Convert.ToInt32(stat.SelectSingleNode("stat_id")?.InnerXml)]
             }).ToList();
         }
 
         public List<Player> GetPlayers(int leagueId, int teamId)
         {
             var teamRosterQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}/players/stats");
-            var jsonResponse = XmlToJObject(teamRosterQueryResults);
-            var players = jsonResponse["fantasy_content"]["team"]["players"]["player"];
-            return players.Select(player => new Player
+            var players = XmlToXmlDocument(teamRosterQueryResults).SelectNodes("//fantasy_content/team/players/player");
+
+            return players?.Cast<XmlNode>().Select(player => new Player
             {
-                PlayerId = (int)player["player_id"],
-                PlayerKey = (string)player["player_key"],
-                Position = (string)player["display_position"],
-                PositionType = (string)player["position_type"],
-                EditorialTeamAbbr = (string)player["editorial_team_abbr"],
-                EditorialTeamKey = (string)player["editorial_team_key"],
-                EditorialTeamName = (string)player["editorial_team_full_name"],
-                UniformNumber = (int)player["uniform_number"],
-                FirstName = (string)player["name"]["first"],
-                LastName = (string)player["name"]["last"],
-                Stats = player["player_stats"]["stats"]["stat"].Select(stat => new Stat
+                PlayerId = Convert.ToInt32(player.SelectSingleNode("player_id")?.InnerXml),
+                PlayerKey = player.SelectSingleNode("player_key")?.InnerXml,
+                Position = player.SelectSingleNode("display_position")?.InnerXml,
+                PositionType = player.SelectSingleNode("position_type")?.InnerXml,
+                EditorialTeamAbbr = player.SelectSingleNode("editorial_team_abbr")?.InnerXml,
+                EditorialTeamKey = player.SelectSingleNode("editorial_team_key")?.InnerXml,
+                EditorialTeamName = player.SelectSingleNode("editorial_team_full_name")?.InnerXml,
+                UniformNumber = Convert.ToInt32(player.SelectSingleNode("uniform_number")?.InnerXml),
+                FirstName = player.SelectSingleNode("name/first")?.InnerXml,
+                LastName = player.SelectSingleNode("name/last")?.InnerXml,
+                Stats = player.SelectNodes("player_stats/stats/stat")?.Cast<XmlNode>().Select(stat => new Stat
                 {
-                    Quantity = stat["value"].ToString() == "-" ? 0 : (int)stat["value"],
-                    StatCategoryId = (int)stat["stat_id"]
+                    Quantity = stat.SelectSingleNode("value")?.InnerXml == "-" ? 0 : Convert.ToInt32(stat.SelectSingleNode("value")?.InnerXml),
+                    StatCategoryId = Convert.ToInt32(stat.SelectSingleNode("stat_id")?.InnerXml)
                 }).ToList()
             }).ToList();
         }
@@ -156,35 +149,29 @@ namespace YahooApi
         public List<Matchup> GetMatchups(int leagueId)
         {
             var scoreboardQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/league/363.l.{leagueId}/scoreboard");
-            var jsonResponse = XmlToJObject(scoreboardQueryResults);
-            var matchups = jsonResponse["fantasy_content"]["league"]["scoreboard"]["matchups"]["matchup"];
+            var matchups = XmlToXmlDocument(scoreboardQueryResults).SelectNodes("//fantasy_content/league/scoreboard/matchups/matchup");
 
-            return matchups.Select(matchup => new Matchup
+            return matchups?.Cast<XmlNode>().Select(matchup => new Matchup
             {
-                Week = (int)matchup["week"],
-                WeekStart = (string)matchup["week_start"],
-                WeekEnd = (string)matchup["week_end"],
-                Teams = matchup["teams"]["team"].Select(team => new Team
+                Week = Convert.ToInt32(matchup.SelectSingleNode("week")?.InnerXml),
+                WeekStart = matchup.SelectSingleNode("week_start")?.InnerXml,
+                WeekEnd = matchup.SelectSingleNode("week_end")?.InnerXml,
+                Teams = matchup.SelectNodes("teams/team")?.Cast<XmlNode>().Select(team => new Team
                 {
-                    Name = (string)team["name"],
-                    TeamId = (int)team["team_id"],
-                    TeamKey = (string)team["team_key"]
+                    Name = team.SelectSingleNode("name")?.InnerXml,
+                    TeamId = Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml),
+                    TeamKey = team.SelectSingleNode("team_key")?.InnerXml
                 }).ToList(),
-                CurrentScore = matchup["teams"]["team"].ToDictionary(team => (int)team["team_id"], team => (double)team["team_points"]["total"])
+                CurrentScore = matchup.SelectNodes("teams/team")?.Cast<XmlNode>().ToDictionary(
+                    team => Convert.ToInt32(team.SelectSingleNode("team_id")?.InnerXml), 
+                    team => Convert.ToDouble(team.SelectSingleNode("team_points/total")?.InnerXml))
             }).ToList();
-        }
-
-        private JObject XmlToJObject(string xmlResponse)
-        {
-            var xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xmlResponse);
-            var json = JsonConvert.SerializeXmlNode(xmlDoc);
-            return JsonConvert.DeserializeObject<JObject>(json);
         }
 
         private XmlDocument XmlToXmlDocument(string xml)
         {
             var xmlDoc = new XmlDocument();
+            xml = xml.Replace(" xmlns=\"", " ns=\"");
             xmlDoc.LoadXml(xml);
             return xmlDoc;
         }
