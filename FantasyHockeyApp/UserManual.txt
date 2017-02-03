@@ -16,14 +16,17 @@ statistics depending on how the league is set up,
 and as such this can change between leagues. An
 example of ths is the 22381 league, which has many
 more stats displayed for skaters than the other.
-Its worth noting that we built our application
-for the 22381 league, which has a "league" style
-of scoring. Many other public leagues use a
-different style of scoring which wont work for
-our app. When a league is created the user that
-created it can customize significant portions
-of how the league's scoring works, but we didnt
-account for this in our app. 
+It's worth noting that we built our application
+for the 22381 and 21165 league scoring styles, so 
+not all publically available leagues will be 
+viewable using this application if they do not 
+follow the standard style of scoring. Many other 
+public leagues use a different style of scoring 
+which wont work for our app. When a league is 
+created the user that created it can customize 
+significant portions of how the league's scoring 
+works, but we didnt account for this in our app 
+since it does not apply to our actual leagues. 
 
 Sources (Also referenced in comments in code):
 http://stackoverflow.com/questions/13019433/calling-method-on-every-x-minutes
