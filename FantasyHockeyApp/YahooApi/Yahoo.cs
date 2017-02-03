@@ -15,6 +15,7 @@ namespace YahooApi
     {
         private readonly OAuthQuery _oauthQuery = new OAuthQuery();
         private const string YahooFantasyUrl = @"http://fantasysports.yahooapis.com/fantasy/v2";
+        private const string _namespace = @"http://fantasysports.yahooapis.com/fantasy/v2/base.rng";
 
         public League GetLeague(int leagueId)
         {
@@ -38,6 +39,10 @@ namespace YahooApi
             var teamQueryResults = _oauthQuery.QueryWithOAuth($"{YahooFantasyUrl}/team/363.l.{leagueId}.t.{teamId}");
             var jsonResponse = XmlToJObject(teamQueryResults);
             var teamJson = jsonResponse["fantasy_content"]["team"];
+            var team = XmlToXmlDocument(teamQueryResults);
+            var nsmgr = new XmlNamespaceManager(team.NameTable);
+            nsmgr.AddNamespace("IKS", _namespace);
+            Debug.WriteLine(team.SelectSingleNode("//IKS:fantasy_content/IKS:team/IKS:name", nsmgr).InnerXml);
             var allPlayers = GetPlayers(leagueId, teamId);
 
             return new Team
@@ -177,5 +182,11 @@ namespace YahooApi
             return JsonConvert.DeserializeObject<JObject>(json);
         }
 
+        private XmlDocument XmlToXmlDocument(string xml)
+        {
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            return xmlDoc;
+        }
     }
 }
