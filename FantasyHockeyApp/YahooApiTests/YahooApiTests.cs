@@ -175,6 +175,15 @@ namespace YahooApiTests
         }
 
         [TestMethod]
+        public void Yahoo_GetPlayersWithInvalidStats_StatsAreZero()
+        {
+            var players = _yahoo.GetPlayers(21165, 5);
+            var matthews = players.First(player => player.PlayerId == 2680);
+            Assert.AreEqual("Datsyuk", matthews.LastName);
+            Assert.IsTrue(matthews.Stats.First(stat => stat.StatCategoryId == 1).Quantity >= 0);
+        }
+
+        [TestMethod]
         public void Yahoo_GetMatchups_MatchupsAreCorrect()
         {
             var matchups = _yahoo.GetMatchups(22381);
