@@ -15,7 +15,7 @@ tab the players and goalies can have different
 statistics depending on how the league is set up,
 and as such this can change between leagues. An
 example of ths is the 22381 league, which has many
-more stats displayed for skaters than the other.
+more stats displayed for skaters than the goalies.
 It's worth noting that we built our application
 for the 22381 and 21165 league scoring styles, so 
 not all publically available leagues will be 
