@@ -33,6 +33,7 @@ namespace YahooApi
             if (LeagueId == 0) return;
             Task.Run(() => Console.WriteLine("Refreshing Data"));
             _league = _yahooApiClient.GetLeague(LeagueId);
+
             FireUpdateEvent();
         }
 
