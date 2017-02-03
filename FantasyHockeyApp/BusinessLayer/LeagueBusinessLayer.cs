@@ -14,7 +14,13 @@ namespace BusinessLayer
             _dataLayer.LeagueDataUpdated += FireUpdateEvent;
         }
 
-        public event Action LeagueDataUpdated;
+        public LeagueBusinessLayer(int leagueId)
+        {
+            _dataLayer = new LeagueDataLayer() {LeagueId = leagueId};
+            _dataLayer.LeagueDataUpdated += FireUpdateEvent;
+        }
+
+        public event Action<int> LeagueDataUpdated;
 
         public List<Team> GetTeams()
         {
@@ -59,8 +65,8 @@ namespace BusinessLayer
             {
                 try
                 {
-                    var action = (Action)handler;
-                    action();
+                    var action = (Action<int>)handler;
+                    action(_dataLayer.LeagueId);
                 }
                 catch (Exception e)
                 {

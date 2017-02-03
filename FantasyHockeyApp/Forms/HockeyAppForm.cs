@@ -13,13 +13,18 @@ namespace Forms
         {
             InitializeComponent();
 
-             _businessLayer = new LeagueBusinessLayer(22381);
+            _businessLayer = new LeagueBusinessLayer(22381);
+            _businessLayer.LeagueDataUpdated += PopulateUi;
         }
 
         public void PopulateUi(int leagueId)
         {
+            if (this.InvokeRequired)
+            {
+                this.Invoke((Action<int>) PopulateUi, leagueId);
+                return;
+            }
             _businessLayer.SetLeagueId(leagueId);
-
             leagueName.Text = _businessLayer.GetLeagueInfo().LeagueName;
             SetUpDataGridViews();
             FillStandings();
