@@ -25,7 +25,7 @@ namespace Forms
                 Invoke((Action<int>) PopulateUi, leagueId);
                 return;
             }
-            _businessLayer.SetLeagueId(leagueId);
+            
             leagueName.Text = _businessLayer.GetLeagueInfo().LeagueName;
             SetUpDataGridViews();
             FillStandings();
@@ -183,6 +183,6 @@ namespace Forms
             FillGoalies(teamId);
         }
 
-        private void leagueIDSubmit_Click(object sender, EventArgs e) => PopulateUi((int)leagueIDNumeric.Value);
+        private void leagueIDSubmit_Click(object sender, EventArgs e) => _businessLayer.SetLeagueId((int)leagueIDNumeric.Value);
     }
 }
