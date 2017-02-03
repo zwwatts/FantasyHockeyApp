@@ -47,7 +47,7 @@ namespace BusinessLayer
             return _dataLayer?.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
         }
 
-        public List<string> GetGaolieStatColumnHeaders()
+        public List<string> GetGoalieStatColumnHeaders()
         {
             return _dataLayer?.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
         }

@@ -26,7 +26,7 @@ namespace Forms
                 return;
             }
             
-            leagueName.Text = _businessLayer.GetLeagueInfo().LeagueName;
+            leagueName.Text = _businessLayer.GetLeagueInfo()?.LeagueName;
             SetUpDataGridViews();
             FillStandings();
             FillTeamSelectionDropDown();
@@ -56,10 +56,13 @@ namespace Forms
             matchupDataGridView.Columns[3].Name = "Score";
             matchupDataGridView.Columns[4].Name = "Team Name";
 
-            //Skaters
-            var columnNames = _businessLayer.GetSkaterStatColumnHeaders();
             
-            SkaterDataGridView.ColumnCount = 5 + columnNames.Count;
+            var skaterColumnNames = _businessLayer.GetSkaterStatColumnHeaders();
+            var goalieColumnNames = _businessLayer.GetGoalieStatColumnHeaders();
+            if (skaterColumnNames == null || goalieColumnNames == null) return;
+
+            //Skaters
+            SkaterDataGridView.ColumnCount = 5 + skaterColumnNames.Count;
             SkaterDataGridView.Columns[0].Name = "First Name";
             SkaterDataGridView.Columns[1].Name = "Last Name";
             SkaterDataGridView.Columns[2].Name = "NHL Team";
@@ -67,16 +70,14 @@ namespace Forms
             SkaterDataGridView.Columns[4].Name = "Position";
 
             var i = 5;
-            foreach (var colName in columnNames)
+            foreach (var colName in skaterColumnNames)
             {
                 SkaterDataGridView.Columns[i].Name = colName;
                 i++;
             }
 
             //Goalies
-            columnNames = _businessLayer.GetGaolieStatColumnHeaders();
-            
-            goalieDataGridView.ColumnCount = 6;
+            goalieDataGridView.ColumnCount = 5 + goalieColumnNames.Count;
             goalieDataGridView.Columns[0].Name = "First Name";
             goalieDataGridView.Columns[1].Name = "Last Name";
             goalieDataGridView.Columns[2].Name = "NHL Team";
@@ -84,9 +85,9 @@ namespace Forms
             goalieDataGridView.Columns[4].Name = "Position";
 
             i = 5;
-            foreach (var colName in columnNames)
+            foreach (var colName in goalieColumnNames)
             {
-                SkaterDataGridView.Columns[i].Name = colName;
+                goalieDataGridView.Columns[i].Name = colName;
                 i++;
             }
         }
@@ -94,7 +95,9 @@ namespace Forms
         private void FillStandings()
         {
             standingsDataGridView.Rows.Clear();
-            foreach (var team in _businessLayer.GetTeams())
+            var teamsList = _businessLayer.GetTeams();
+            if (teams == null) return;
+            foreach (var team in teamsList)
             {
                 object[] row = {
                     team.Standings.Rank,
@@ -114,7 +117,8 @@ namespace Forms
         private void FillMatchUps()
         {
             matchupDataGridView.Rows.Clear();
-            foreach (var matchup in _businessLayer.GetWeeklyMatchups())
+            var matchupList = _businessLayer.GetWeeklyMatchups();
+            foreach (var matchup in matchupList)
             {
                 object[] row = {
                     matchup.Teams[0].Name,
@@ -131,7 +135,8 @@ namespace Forms
         private void FillSkaters(int team)
         {
             SkaterDataGridView.Rows.Clear();
-            foreach (var player in _businessLayer.GetTeam(team).Skaters)
+            var skaters = _businessLayer.GetTeam(team).Skaters;
+            foreach (var player in skaters)
             {
                 var dataRow = new List<string>
                 {
@@ -143,14 +148,15 @@ namespace Forms
                 };
 
                 dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
-                SkaterDataGridView.Rows.Add(dataRow.ToArray());
+                SkaterDataGridView.Rows.Add(dataRow.ToArray<object>());
             }
         }
 
         private void FillGoalies(int team)
         {
             goalieDataGridView.Rows.Clear();
-            foreach (var player in _businessLayer.GetTeam(team).Goalies)
+            var goalies = _businessLayer.GetTeam(team).Goalies;
+            foreach (var player in goalies)
             {
                 var dataRow = new List<string>
                 {
@@ -162,7 +168,7 @@ namespace Forms
                 };
                 dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
 
-                goalieDataGridView.Rows.Add(dataRow.ToArray());
+                goalieDataGridView.Rows.Add(dataRow.ToArray<object>());
             }
         }
 
