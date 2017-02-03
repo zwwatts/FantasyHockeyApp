@@ -27,6 +27,16 @@ created the user that created it can customize
 significant portions of how the league's scoring 
 works, but we didnt account for this in our app 
 since it does not apply to our actual leagues. 
+One thing to also take note of is that the app
+refreshes its data every minute automatically, 
+so if stats are changing during the evening while
+games are going on, you will be able to see the 
+changes within a minute of them actually happening.
+If you lose internet connection while the app 
+is running, the fields in the UI will go blank 
+since there is no data to display. Once internet 
+connection is re-established, the UI will update
+again with the most up to date data.
 
 Sources (Also referenced in comments in code):
 http://stackoverflow.com/questions/13019433/calling-method-on-every-x-minutes
