@@ -1,6 +1,7 @@
 ﻿using System;
 using Models;
 using System.Collections.Generic;
+using System.Linq;
 using YahooApi;
 
 namespace BusinessLayer
@@ -8,11 +9,8 @@ namespace BusinessLayer
     public class LeagueBusinessLayer
     {
         private readonly LeagueDataLayer _dataLayer;
-        public LeagueBusinessLayer()
-        {
-            _dataLayer = new LeagueDataLayer();
-            _dataLayer.LeagueDataUpdated += FireUpdateEvent;
-        }
+        private const string GoalieCode = "G";
+        private const string SkaterCode = "P";
 
         public LeagueBusinessLayer(int leagueId)
         {
@@ -24,37 +22,39 @@ namespace BusinessLayer
 
         public List<Team> GetTeams()
         {
-            return _dataLayer.GetTeams();
+            return _dataLayer?.GetTeams();
         }
 
         public void SetLeagueId(int leagueId)
         {
+            if(leagueId == _dataLayer.LeagueId) return;
             _dataLayer.LeagueId = leagueId;
+            _dataLayer?.ResetInterval();
         }
 
         public Team GetTeam(int teamId)
         {
-            return _dataLayer.GetTeam(teamId);
-        }
-
-        public List<Player> GetPlayers()
-        {
-            return null;
+            return _dataLayer?.GetTeam(teamId);
         }
 
         public LeagueInfo GetLeagueInfo()
         {
-            return _dataLayer.GetLeagueInfo();
+            return _dataLayer?.GetLeagueInfo();
         }
 
-        public List<Standings> GetLeagueStandings()
+        public List<string> GetSkaterStatColumnHeaders()
         {
-            return null;
+            return _dataLayer?.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
+        }
+
+        public List<string> GetGaolieStatColumnHeaders()
+        {
+            return _dataLayer?.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
         }
 
         public List<Matchup> GetWeeklyMatchups()
         {
-            return _dataLayer.GetWeeklyMatchups();
+            return _dataLayer?.GetWeeklyMatchups();
         }
 
         private void FireUpdateEvent()

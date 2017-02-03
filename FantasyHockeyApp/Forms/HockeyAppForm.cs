@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using BusinessLayer;
@@ -19,12 +20,12 @@ namespace Forms
 
         public void PopulateUi(int leagueId)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke((Action<int>) PopulateUi, leagueId);
+                Invoke((Action<int>) PopulateUi, leagueId);
                 return;
             }
-            _businessLayer.SetLeagueId(leagueId);
+            
             leagueName.Text = _businessLayer.GetLeagueInfo().LeagueName;
             SetUpDataGridViews();
             FillStandings();
@@ -56,22 +57,38 @@ namespace Forms
             matchupDataGridView.Columns[4].Name = "Team Name";
 
             //Skaters
-            SkaterDataGridView.ColumnCount = 6;
+            var columnNames = _businessLayer.GetSkaterStatColumnHeaders();
+            
+            SkaterDataGridView.ColumnCount = 5 + columnNames.Count;
             SkaterDataGridView.Columns[0].Name = "First Name";
             SkaterDataGridView.Columns[1].Name = "Last Name";
             SkaterDataGridView.Columns[2].Name = "NHL Team";
             SkaterDataGridView.Columns[3].Name = "Uniform Number";
             SkaterDataGridView.Columns[4].Name = "Position";
-            SkaterDataGridView.Columns[5].Name = "stats"; 
+
+            var i = 5;
+            foreach (var colName in columnNames)
+            {
+                SkaterDataGridView.Columns[i].Name = colName;
+                i++;
+            }
 
             //Goalies
+            columnNames = _businessLayer.GetGaolieStatColumnHeaders();
+            
             goalieDataGridView.ColumnCount = 6;
             goalieDataGridView.Columns[0].Name = "First Name";
             goalieDataGridView.Columns[1].Name = "Last Name";
             goalieDataGridView.Columns[2].Name = "NHL Team";
             goalieDataGridView.Columns[3].Name = "Uniform Number";
             goalieDataGridView.Columns[4].Name = "Position";
-            goalieDataGridView.Columns[5].Name = "stats";
+
+            i = 5;
+            foreach (var colName in columnNames)
+            {
+                SkaterDataGridView.Columns[i].Name = colName;
+                i++;
+            }
         }
 
         private void FillStandings()
@@ -116,17 +133,17 @@ namespace Forms
             SkaterDataGridView.Rows.Clear();
             foreach (var player in _businessLayer.GetTeam(team).Skaters)
             {
-                object[] row =
+                var dataRow = new List<string>
                 {
                     player.FirstName,
                     player.LastName,
                     player.EditorialTeamName,
-                    player.UniformNumber,
-                    player.Position,
-                    "Stats"
+                    player.UniformNumber.ToString(),
+                    player.Position
                 };
 
-                SkaterDataGridView.Rows.Add(row);
+                dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
+                SkaterDataGridView.Rows.Add(dataRow.ToArray());
             }
         }
 
@@ -135,17 +152,17 @@ namespace Forms
             goalieDataGridView.Rows.Clear();
             foreach (var player in _businessLayer.GetTeam(team).Goalies)
             {
-                object[] row =
+                var dataRow = new List<string>
                 {
                     player.FirstName,
                     player.LastName,
                     player.EditorialTeamName,
-                    player.UniformNumber,
-                    player.Position,
-                    "Stats"
+                    player.UniformNumber.ToString(),
+                    player.Position
                 };
+                dataRow.AddRange(player.Stats.Select(stat => stat.Quantity.ToString()));
 
-                goalieDataGridView.Rows.Add(row);
+                goalieDataGridView.Rows.Add(dataRow.ToArray());
             }
         }
 
@@ -166,6 +183,6 @@ namespace Forms
             FillGoalies(teamId);
         }
 
-        private void leagueIDSubmit_Click(object sender, EventArgs e) => PopulateUi((int)leagueIDNumeric.Value);
+        private void leagueIDSubmit_Click(object sender, EventArgs e) => _businessLayer.SetLeagueId((int)leagueIDNumeric.Value);
     }
 }

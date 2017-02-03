@@ -26,9 +26,15 @@ namespace YahooApi
 
         public event Action LeagueDataUpdated;
 
-        public void RefreshData()
+        public void ResetInterval()
+        {
+            _timer.Change(0, (int)TimeSpan.FromMinutes(RefreshInterval).TotalMilliseconds);
+        }
+
+        private void RefreshData()
         {
             if (LeagueId <= 0) return;
+            Task.Run(() => Console.WriteLine("Refreshing Data"));
             _league = _yahooApiClient.GetLeague(LeagueId);
             FireUpdateEvent();
         }
@@ -55,16 +61,21 @@ namespace YahooApi
         {
             return new LeagueInfo
                 {
-                    LeagueName = _league.Name
+                    LeagueName = _league?.Name
                 };
         }
 
         public List<Team> GetTeams()
         {
-            return _league.Teams;
+            return _league?.Teams;
         }
 
         public Team GetTeam(int teamId) => _league.Teams.First(team => team.TeamId == teamId);
+
+        public List<StatCategory> GetStatCategories()
+        {
+            return _league.StatCategories;
+        }
 
         public List<Matchup> GetWeeklyMatchups() => _league.Matchups;
     }
