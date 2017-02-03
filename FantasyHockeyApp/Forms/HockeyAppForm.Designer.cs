@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HockeyAppForm));
             this.appName = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.standings = new System.Windows.Forms.TabPage();
@@ -336,6 +337,7 @@
             this.ClientSize = new System.Drawing.Size(982, 455);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "HockeyAppForm";
             this.Text = "Yahoo Fantasy Hockey App";
