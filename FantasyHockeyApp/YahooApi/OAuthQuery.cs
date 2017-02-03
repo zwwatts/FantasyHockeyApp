@@ -30,9 +30,7 @@ namespace YahooApi
             _token = newToken;
             _tokenSecret = newSecret;
 
-            var dictionary = new Dictionary<string, string>();
-            dictionary.Add("Token", newToken);
-            dictionary.Add("TokenSecret", newSecret);
+            var dictionary = new Dictionary<string, string> {{"Token", newToken}, {"TokenSecret", newSecret}};
 
             return dictionary;
         }
