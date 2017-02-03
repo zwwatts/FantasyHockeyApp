@@ -31,7 +31,7 @@ namespace Forms
             FillStandings();
             FillTeamSelectionDropDown();
             FillMatchUps();
-            var initialTeamToDisplay = _businessLayer.GetTeams().First().TeamId;
+            var initialTeamToDisplay = _businessLayer?.GetTeams()?.FirstOrDefault()?.TeamId ?? 0;
             FillGoalies(initialTeamToDisplay);
             FillSkaters(initialTeamToDisplay);
         }
@@ -136,7 +136,7 @@ namespace Forms
         private void FillSkaters(int team)
         {
             SkaterDataGridView.Rows.Clear();
-            var skaters = _businessLayer.GetTeam(team).Skaters;
+            var skaters = _businessLayer.GetTeam(team)?.Skaters;
             if(skaters == null) return;
             foreach (var player in skaters)
             {
@@ -157,7 +157,7 @@ namespace Forms
         private void FillGoalies(int team)
         {
             goalieDataGridView.Rows.Clear();
-            var goalies = _businessLayer.GetTeam(team).Goalies;
+            var goalies = _businessLayer.GetTeam(team)?.Goalies;
             if (goalies == null) return;
             foreach (var player in goalies)
             {
@@ -186,10 +186,11 @@ namespace Forms
         private void teamComboBoxEventHandler(object sender, EventArgs e)
         {
             var teamBox = (ComboBox) sender;
-            var teamId = (int) teamBox.SelectedValue;
+            var teamId = teamBox.SelectedValue;
+            if (teamId == null) return;
 
-            FillSkaters(teamId);
-            FillGoalies(teamId);
+            FillSkaters((int)teamId);
+            FillGoalies((int)teamId);
         }
 
         private void leagueIDSubmit_Click(object sender, EventArgs e) => _businessLayer.SetLeagueId((int)leagueIDNumeric.Value);
