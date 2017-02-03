@@ -44,6 +44,9 @@
             this.teamComboBox = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.leagueName = new System.Windows.Forms.Label();
+            this.leagueIDSubmit = new System.Windows.Forms.Button();
+            this.leagueIDLabel = new System.Windows.Forms.Label();
+            this.leagueIDNumeric = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.standings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.standingsDataGridView)).BeginInit();
@@ -57,6 +60,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.SkaterDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.goalieDataGridView)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.leagueIDNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // appName
@@ -78,11 +82,11 @@
             this.tabControl1.Controls.Add(this.matchups);
             this.tabControl1.Controls.Add(this.teams);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 44);
+            this.tabControl1.Location = new System.Drawing.Point(0, 53);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(982, 411);
+            this.tabControl1.Size = new System.Drawing.Size(982, 402);
             this.tabControl1.TabIndex = 1;
             // 
             // standings
@@ -92,7 +96,7 @@
             this.standings.Margin = new System.Windows.Forms.Padding(4);
             this.standings.Name = "standings";
             this.standings.Padding = new System.Windows.Forms.Padding(4);
-            this.standings.Size = new System.Drawing.Size(974, 382);
+            this.standings.Size = new System.Drawing.Size(974, 373);
             this.standings.TabIndex = 0;
             this.standings.Text = "Standings";
             this.standings.UseVisualStyleBackColor = true;
@@ -113,7 +117,7 @@
             this.standingsDataGridView.ReadOnly = true;
             this.standingsDataGridView.RowHeadersVisible = false;
             this.standingsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.standingsDataGridView.Size = new System.Drawing.Size(966, 374);
+            this.standingsDataGridView.Size = new System.Drawing.Size(966, 365);
             this.standingsDataGridView.TabIndex = 0;
             // 
             // matchups
@@ -265,12 +269,15 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.leagueIDNumeric);
+            this.panel1.Controls.Add(this.leagueIDLabel);
+            this.panel1.Controls.Add(this.leagueIDSubmit);
             this.panel1.Controls.Add(this.leagueName);
             this.panel1.Controls.Add(this.appName);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(982, 44);
+            this.panel1.Size = new System.Drawing.Size(982, 53);
             this.panel1.TabIndex = 2;
             // 
             // leagueName
@@ -282,6 +289,45 @@
             this.leagueName.Size = new System.Drawing.Size(192, 17);
             this.leagueName.TabIndex = 1;
             this.leagueName.Text = "<League Name Placeholder>";
+            // 
+            // leagueIDSubmit
+            // 
+            this.leagueIDSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.leagueIDSubmit.Location = new System.Drawing.Point(107, 26);
+            this.leagueIDSubmit.Name = "leagueIDSubmit";
+            this.leagueIDSubmit.Size = new System.Drawing.Size(66, 23);
+            this.leagueIDSubmit.TabIndex = 2;
+            this.leagueIDSubmit.Text = "Submit";
+            this.leagueIDSubmit.UseVisualStyleBackColor = true;
+            this.leagueIDSubmit.Click += new System.EventHandler(this.leagueIDSubmit_Click);
+            // 
+            // leagueIDLabel
+            // 
+            this.leagueIDLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.leagueIDLabel.AutoSize = true;
+            this.leagueIDLabel.Location = new System.Drawing.Point(3, 7);
+            this.leagueIDLabel.Name = "leagueIDLabel";
+            this.leagueIDLabel.Size = new System.Drawing.Size(73, 17);
+            this.leagueIDLabel.TabIndex = 4;
+            this.leagueIDLabel.Text = "League ID";
+            // 
+            // leagueIDNumeric
+            // 
+            this.leagueIDNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.leagueIDNumeric.Location = new System.Drawing.Point(5, 26);
+            this.leagueIDNumeric.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.leagueIDNumeric.Name = "leagueIDNumeric";
+            this.leagueIDNumeric.Size = new System.Drawing.Size(96, 22);
+            this.leagueIDNumeric.TabIndex = 5;
+            this.leagueIDNumeric.Value = new decimal(new int[] {
+            22381,
+            0,
+            0,
+            0});
             // 
             // HockeyAppForm
             // 
@@ -310,6 +356,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.goalieDataGridView)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.leagueIDNumeric)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -332,6 +379,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label leagueName;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Label leagueIDLabel;
+        private System.Windows.Forms.Button leagueIDSubmit;
+        private System.Windows.Forms.NumericUpDown leagueIDNumeric;
     }
 }
 
