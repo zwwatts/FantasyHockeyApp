@@ -142,7 +142,7 @@ namespace YahooApi
                 LastName = (string)player["name"]["last"],
                 Stats = player["player_stats"]["stats"]["stat"].Select(stat => new Stat
                 {
-                    Quantity = (int)stat["value"],
+                    Quantity = stat["value"].ToString() == "-" ? 0 : (int)stat["value"],
                     StatCategoryId = (int)stat["stat_id"]
                 }).ToList()
             }).ToList();
