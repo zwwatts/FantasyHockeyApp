@@ -33,9 +33,9 @@ namespace BusinessLayer
 
         public LeagueInfo GetLeagueInfo() => _dataLayer?.GetLeagueInfo();
 
-        public List<string> GetSkaterStatColumnHeaders() => _dataLayer?.GetStatCategories().Where(category => category.PositionType == SkaterCode).Select(category => category.DisplayName).ToList();
+        public List<string> GetSkaterStatColumnHeaders() => _dataLayer?.GetStatCategories()?.Where(category => category?.PositionType == SkaterCode).Select(category => category?.DisplayName).ToList();
 
-        public List<string> GetGoalieStatColumnHeaders() => _dataLayer?.GetStatCategories().Where(category => category.PositionType == GoalieCode).Select(category => category.DisplayName).ToList();
+        public List<string> GetGoalieStatColumnHeaders() => _dataLayer?.GetStatCategories()?.Where(category => category?.PositionType == GoalieCode).Select(category => category?.DisplayName).ToList();
 
         public List<Matchup> GetWeeklyMatchups() => _dataLayer?.GetWeeklyMatchups();
 
